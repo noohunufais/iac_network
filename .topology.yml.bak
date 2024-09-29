@@ -1,0 +1,130 @@
+name: netman
+
+mgmt:
+  network: fixedips
+  ipv4-subnet: 172.20.20.0/24
+  ipv6-subnet: 2001:172:20:20::/80
+
+topology:
+  nodes:
+    R1:
+      kind: ceos
+      image: ceos:4.32.2F
+      mgmt-ipv4: 172.20.20.11
+      mgmt-ipv6: 2001:172:20:20::11
+      startup-config: /home/student/iac_network/configs/R1.cfg
+    R2:
+      kind: ceos
+      image: ceos:4.32.2F
+      mgmt-ipv4: 172.20.20.12
+      mgmt-ipv6: 2001:172:20:20::12
+      startup-config: /home/student/iac_network/configs/R2.cfg
+    R3:
+      kind: ceos
+      image: ceos:4.32.2F
+      mgmt-ipv4: 172.20.20.13
+      mgmt-ipv6: 2001:172:20:20::13
+      startup-config: /home/student/iac_network/configs/R3.cfg
+    R4:
+      kind: ceos
+      image: ceos:4.32.2F
+      mgmt-ipv4: 172.20.20.14
+      mgmt-ipv6: 2001:172:20:20::14
+      startup-config: /home/student/iac_network/configs/R4.cfg
+    R5:
+      kind: ceos
+      image: ceos:4.32.2F
+      mgmt-ipv4: 172.20.20.15
+      mgmt-ipv6: 2001:172:20:20::15
+      startup-config: /home/student/iac_network/configs/R5.cfg
+    S1:
+      kind: ceos
+      image: ceos:4.32.2F
+      mgmt-ipv4: 172.20.20.16
+      mgmt-ipv6: 2001:172:20:20::16
+      startup-config: /home/student/iac_network/configs/S1.cfg
+    S2:
+      kind: ceos
+      image: ceos:4.32.2F
+      mgmt-ipv4: 172.20.20.17
+      mgmt-ipv6: 2001:172:20:20::17
+      startup-config: /home/student/iac_network/configs/S2.cfg
+    S3:
+      kind: ceos
+      image: ceos:4.32.2F
+      mgmt-ipv4: 172.20.20.18
+      mgmt-ipv6: 2001:172:20:20::18
+      startup-config: /home/student/iac_network/configs/S3.cfg
+    S4:
+      kind: ceos
+      image: ceos:4.32.2F
+      mgmt-ipv4: 172.20.20.19
+      mgmt-ipv6: 2001:172:20:20::19
+      startup-config: /home/student/iac_network/configs/S4.cfg
+    webserver:
+      kind: linux
+      image: ubuntu-apache
+      mgmt-ipv4: 172.20.20.20
+      mgmt-ipv6: 2001:172:20:20::20
+      exec:
+        - ip addr add 10.0.100.1/24 dev eth1
+        - ip -6 addr add 2100::1/64 dev eth1
+        - ip route add 10.0.0.0/16 via 10.0.100.5 dev eth1
+        - ip -6 route add 2000::/1 via 2100::5 dev eth1
+    H1:
+      kind: linux
+      image: ubuntu-host
+      mgmt-ipv4: 172.20.20.21
+      mgmt-ipv6: 2001:172:20:20::21
+      exec:
+        - dhclient eth1
+        - ip route add 10.0.0.0/16 via 10.0.10.3 dev eth1
+        - dhclient -6 eth1
+        - ip -6 route add 2000::/1 via 2010::3 dev eth1
+    H2:
+      kind: linux
+      image: ubuntu-host
+      mgmt-ipv4: 172.20.20.22
+      mgmt-ipv6: 2001:172:20:20::22
+      exec:
+        - dhclient eth1
+        - ip route add 10.0.0.0/16 via 10.0.20.3 dev eth1
+        - dhclient -6 eth1
+        - ip -6 route add 2000::/1 via 2020::3 dev eth1
+    H3:
+      kind: linux
+      image: ubuntu-host
+      mgmt-ipv4: 172.20.20.23
+      mgmt-ipv6: 2001:172:20:20::23
+      exec:
+        - dhclient eth1
+        - ip route add 10.0.0.0/16 via 10.0.10.3 dev eth1
+        - dhclient -6 eth1
+        - ip -6 route add 2000::/1 via 2010::3 dev eth1
+    H4:
+      kind: linux
+      image: ubuntu-host
+      mgmt-ipv4: 172.20.20.24
+      mgmt-ipv6: 2001:172:20:20::24
+      exec:
+        - dhclient -6 eth1
+        - ip -6 route add 2000::/1 via 2030::3 dev eth1
+
+  links:
+    - endpoints: ["R3:eth1", "R4:eth1"]
+    - endpoints: ["S1:eth1", "S2:eth1"]
+    - endpoints: ["S3:eth1", "S4:eth1"]
+    - endpoints: ["R1:eth2", "S1:eth2"]
+    - endpoints: ["R2:eth2", "S2:eth2"]
+    - endpoints: ["R1:eth3", "S3:eth3"]
+    - endpoints: ["R2:eth3", "S4:eth3"]
+    - endpoints: ["R3:eth2", "S3:eth2"]
+    - endpoints: ["R4:eth2", "S4:eth2"]
+    - endpoints: ["R3:eth3", "R5:eth1"]
+    - endpoints: ["R4:eth3", "R5:eth2"]
+    - endpoints: ["webserver:eth1", "R5:eth3"]
+    - endpoints: ["H1:eth1", "S1:eth3"]
+    - endpoints: ["H2:eth1", "S1:eth4"]
+    - endpoints: ["H3:eth1", "S2:eth3"]
+    - endpoints: ["H4:eth1", "S2:eth4"]
+    - endpoints: ["S3:eth4", "host:S3_eth4"]
