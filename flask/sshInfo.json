@@ -1,0 +1,14 @@
+{
+    "router_1": {
+        "device_type": "cisco_ios",
+        "ip": "198.51.100.1",
+        "username": "nufais",
+        "password": "netman"
+    },
+    "router_2": {
+        "device_type": "cisco_ios",
+        "ip": "198.51.100.3",
+        "username": "nufais",
+        "password": "netman"
+    }
+}

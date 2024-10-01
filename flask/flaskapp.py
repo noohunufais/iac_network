@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+import getconfig
 app = Flask(__name__)
 
 @app.route("/")
@@ -16,6 +17,10 @@ def add_device():
 @app.route("/read_form", methods=['POST'])
 def read_form():
     return request.form
+
+@app.route("/golden_config", methods=['GET'])
+def golden_config():
+    return getconfig.get_golden_config()
         
 
 if __name__ == "__main__":

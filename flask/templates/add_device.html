@@ -30,13 +30,21 @@
       <div class="content">
         <form action="{{ url_for('read_form') }}" method="post">
           <div class="mb-3">
-            <label for="name_field" class="form-label">Host Name</label>
-            <input type="text" name="name" class="form-control" id="name_field" placeholder="Router10" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            <label for="host_field" class="form-label">Host Name</label>
+            <input type="text" name="name" class="form-control" id="host_field" placeholder="Router10" aria-describedby="emailHelp">
+            <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+          </div>
+          <div class="mb-3"></div>
+            <label for="user_field" name="username" class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" id="user_field">
           </div>
           <div class="mb-3">
-            <label for="exampleInputPassword1" name="password" class="form-label">Password</label>
-            <input type="text" name="passowrd" class="form-control" id="exampleInputPassword1">
+            <label for="pass_field" name="password" class="form-label">Password</label>
+            <input type="text" name="passowrd" class="form-control" id="pass_field">
+          </div>
+          <div class="mb-3">
+            <label for="interface_field" name="interface_ip" class="form-label">Mgmt Interface IP</label>
+            <input type="text" name="interface" class="form-control" id="interface_field">
           </div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>

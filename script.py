@@ -14,7 +14,6 @@ with open(template_file) as f:
 startup_config = cisco_template.render(config_items)
 
 
-
 golden_config_file_path = '/home/student/iac_network/golden_configs/R1.cfg'  
 
 with open(golden_config_file_path, 'w') as output_file:
