@@ -1,0 +1,56 @@
+{
+    "hostname": "S4",
+    "username": "admin",
+    "password": "netman",
+    "logging": {
+      "trap": "notifications",
+      "host": "10.0.60.100",
+      "source_address": "10.0.60.14"
+    },
+    "snmp": {
+      "community": "netman",
+      "host": "10.0.60.100",
+      "version": "2c"
+    },
+    "interfaces": [
+      {
+        "name": "Ethernet1",
+        "commands": []
+      },
+      {
+        "name": "Ethernet2",
+        "commands": []
+      },
+      {
+        "name": "Ethernet3",
+        "commands": []
+      },
+      {
+        "name": "Ethernet4",
+        "commands": []
+      },
+      {
+        "name": "Management0",
+        "commands": [
+            "ip address 172.20.20.19/24",
+            "ipv6 address 2001:172:20:20::19/80"
+        ]
+      },
+      {
+          "name": "Vlan1",
+          "commands": [
+              "ip address 10.0.60.14/24"
+          ]
+      }
+    ],
+    "ip_route": [
+      {
+        "destination": "0.0.0.0/0",
+        "next_hop": "172.20.20.1"
+      }
+    ],
+    "ipv6_route": {
+      "destination": "::/0",
+      "next_hop": "2001:172:20:20::1"
+    }
+  }  

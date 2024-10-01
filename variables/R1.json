@@ -1,0 +1,99 @@
+{
+    "hostname": "R1",
+    "username": "admin",
+    "password": "netman",
+    "vlans": [10, 20, 30],
+    "logging": {
+        "trap": "notifications",
+        "host": "10.0.60.100",
+        "source_address": "10.0.60.1"
+    },
+    "snmp": {
+        "community": "netman",
+        "host": "10.0.60.100",
+        "version": "2c"
+    },
+    "virtual_router_mac": "00:11:ff:00:11:ff",
+    "ip_route": [
+        {
+        "destination": "0.0.0.0/0",
+        "next_hop": "172.20.20.1"
+        }
+    ],
+    "ipv6_route": {
+        "destination": "::/0",
+        "next_hop": "2001:172:20:20::1"
+    },
+    "ospf": {
+    "process_id": 1,
+    "networks": [
+    {
+        "network": "10.0.0.0/16",
+        "area": "0.0.0.0"
+    }
+    ]
+    },
+    "ospfv3": {
+    "process_id": 1
+    },
+    "interfaces": [
+        {
+            "name": "Ethernet1",
+            "commands": []
+        },
+        {
+            "name": "Ethernet2",
+            "commands": [
+                "switchport mode trunk"
+            ]
+        },
+        {
+            "name": "Ethernet3",
+            "commands": [
+                "no switchport",
+                "ip address 10.0.60.1/24",
+                "ipv6 enable",
+                "ipv6 address 2060::1/64",
+                "ipv6 ospf 1 area 0.0.0.0"
+            ]
+        },
+        {
+            "name": "Management0",
+            "commands": [
+                "ip address 172.20.20.11/24",
+                "ipv6 address 2001:172:20:20::11/80"
+            ]
+        },
+        {
+            "name": "Vlan10",
+            "commands": [
+                "ip address 10.0.10.1/24",
+                "ipv6 enable",
+                "ipv6 address 2010::1/64",
+                "ipv6 ospf 1 area 0.0.0.0",
+                "ip virtual-router address 10.0.10.3",
+                "ipv6 virtual-router address 2010::3"
+            ]
+        },
+        {
+            "name": "Vlan20",
+            "commands": [
+                "ip address 10.0.20.1/24",
+                "ipv6 enable",
+                "ipv6 address 2020::1/64",
+                "ipv6 ospf 1 area 0.0.0.0",
+                "ip virtual-router address 10.0.20.3",
+                "ipv6 virtual-router address 2020::3"
+            ]
+        },
+        {
+            "name": "Vlan30",
+            "commands": [
+                "ipv6 enable",
+                "ipv6 address 2030::1/64",
+                "ipv6 ospf 1 area 0.0.0.0",
+                "ipv6 virtual-router address 2030::3"
+            ]
+        }
+    ]
+}

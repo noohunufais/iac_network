@@ -1,0 +1,135 @@
+{
+    "hostname": "R2",
+    "username": "admin",
+    "password": "netman",
+    "vlans": [10, 20, 30],
+    "logging": {
+        "trap": "notifications",
+        "host": "10.0.60.100",
+        "source_address": "10.0.60.2"
+    },
+    "snmp": {
+        "community": "netman",
+        "host": "10.0.60.100",
+        "version": "2c"
+    },
+    "dhcp": {
+        "subnets": [
+            {
+                "subnet": "10.0.10.0/24",
+                "range": "10.0.10.4 10.0.10.254",
+                "name": "VLAN_10",
+                "default_gateway": "10.0.10.3"
+            },
+            {
+                "subnet": "10.0.20.0/24",
+                "range": "10.0.20.4 10.0.20.254",
+                "name": "VLAN_20",
+                "default_gateway": "10.0.20.3"
+            },
+            {
+                "subnet": "2010::/64",
+                "range": "2010::4 2010::11",
+                "name": "VLAN_10"
+            },
+            {
+                "subnet": "2020::/64",
+                "range": "2020::4 2020::11",
+                "name": "VLAN_20"
+            },
+            {
+                "subnet": "2030::/64",
+                "range": "2030::4 2030::11",
+                "name": "VLAN_30"
+            }
+        ]
+    },
+    "virtual_router_mac": "00:11:ff:00:11:ff",
+    "ip_route": [
+        {
+        "destination": "0.0.0.0/0",
+        "next_hop": "172.20.20.1"
+        }
+    ],
+    "ipv6_route": {
+        "destination": "::/0",
+        "next_hop": "2001:172:20:20::1"
+    },
+    "ospf": {
+        "process_id": 1,
+        "networks": [
+            {
+                "network": "10.0.0.0/16",
+                "area": "0.0.0.0"
+            }
+        ]
+    },
+    "ospfv3": {
+    "process_id": 1
+    },
+    "interfaces": [
+        {
+            "name": "Ethernet1",
+            "commands": []
+        },
+        {
+            "name": "Ethernet2",
+            "commands": [
+                "switchport mode trunk"
+            ]
+        },
+        {
+            "name": "Ethernet3",
+            "commands": [
+                "no switchport",
+                "ip address 10.0.60.2/24",
+                "ipv6 enable",
+                "ipv6 address 2060::2/24",
+                "ipv6 ospf 1 area 0.0.0.0"
+            ]
+        },
+        {
+            "name": "Management0",
+            "commands": [
+                "ip address 172.20.20.12/24",
+                "ipv6 address 2001:172:20:20::12/80"
+            ]
+        },
+        {
+            "name": "Vlan10",
+            "commands": [
+                "ip address 10.0.10.2/24",
+                "dhcp server ipv4",
+                "dhcp server ipv6",
+                "ipv6 enable",
+                "ipv6 address 2010::2/64",
+                "ipv6 ospf 1 area 0.0.0.0",
+                "ip virtual-router address 10.0.10.3",
+                "ipv6 virtual-router address 2010::3"
+            ]
+        },
+        {
+            "name": "Vlan20",
+            "commands": [
+                "ip address 10.0.20.2/24",
+                "dhcp server ipv4",
+                "dhcp server ipv6",
+                "ipv6 enable",
+                "ipv6 address 2020::2/64",
+                "ipv6 ospf 1 area 0.0.0.0",
+                "ip virtual-router address 10.0.20.3",
+                "ipv6 virtual-router address 2020::3"
+            ]
+        },
+        {
+            "name": "Vlan30",
+            "commands": [
+                "dhcp server ipv6",
+                "ipv6 enable",
+                "ipv6 address 2030::2/64",
+                "ipv6 ospf 1 area 0.0.0.0",
+                "ipv6 virtual-router address 2030::3"
+            ]
+        }
+    ]
+}

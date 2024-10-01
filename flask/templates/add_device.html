@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %} Add Device {% endblock %}
+
+{% block nav %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="/static/cu-logo.webp" alt="" width="30" height="24" class="d-inline-block align-text-top">
+    </a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:3000/dashboards" target="_blank">Grafana</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+    
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6"> <!-- Adjust the column size here -->
+      <div class="content">
+        <form action="{{ url_for('read_form') }}" method="post">
+          <div class="mb-3">
+            <label for="name_field" class="form-label">Host Name</label>
+            <input type="text" name="name" class="form-control" id="name_field" placeholder="Router10" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" name="password" class="form-label">Password</label>
+            <input type="text" name="passowrd" class="form-control" id="exampleInputPassword1">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+

@@ -1,0 +1,70 @@
+{
+    "hostname": "S2",
+    "username": "admin",
+    "password": "netman",
+    "logging": {
+      "trap": "notifications",
+      "host": "10.0.60.100",
+      "source_address": "10.0.10.12"
+    },
+    "snmp": {
+      "community": "netman",
+      "host": "10.0.60.100",
+      "version": "2c"
+    },
+    "vlans": [10, 20, 30],
+    "interfaces": [
+      {
+        "name": "Ethernet1",
+        "commands": [
+          "switchport mode trunk"
+        ]
+      },
+      {
+        "name": "Ethernet2",
+        "commands": [
+          "switchport mode trunk"
+        ]
+      },
+      {
+        "name": "Ethernet3",
+        "commands": [
+          "switchport access vlan 10"
+        ]
+      },
+      {
+        "name": "Ethernet4",
+        "commands": [
+          "switchport access vlan 30"
+        ]
+      },
+      {
+        "name": "Management0",
+        "commands": [
+          "ip address 172.20.20.17/24",
+          "ipv6 address 2001:172:20:20::17/80"
+        ]
+      },
+      {
+        "name": "Vlan10",
+        "commands": [
+            "ip address 10.0.10.12/24"
+        ]
+      }
+    ],
+    "ip_route": [
+      {
+        "destination": "0.0.0.0/0",
+        "next_hop": "172.20.20.1"
+      },
+      {
+        "destination": "10.0.0.0/16",
+        "next_hop": "10.0.10.3"
+      }
+    ],
+    "ipv6_route": {
+      "destination": "::/0",
+      "next_hop": "2001:172:20:20::1"
+    }
+  }
+  

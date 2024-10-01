@@ -1,0 +1,126 @@
+! Command: show running-config
+! device: {{ hostname }} (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
+!
+no aaa root
+!
+username {{ username }} privilege 15 role network-admin secret {{ password }}
+!
+management api http-commands
+   no shutdown
+!
+{%- if dhcp %}
+dhcp server
+{%- for subnet in dhcp.subnets %}
+   subnet {{ subnet.subnet }}
+      range {{ subnet.range }}
+      {%- if subnet.name %}
+      name {{ subnet.name }}
+      {%- endif %}
+      {%- if subnet.default_gateway %}
+      default-gateway {{ subnet.default_gateway }}
+      {%- endif %}
+   {%- if not loop.last %}
+   !
+   {%- endif %}
+{%- endfor %}
+!
+{%- endif %}
+no service interface inactive port-id allocation disabled
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+{%- if logging %}
+logging trap {{ logging.trap }}
+logging host {{ logging.host }}
+logging source-address {{ logging.source_address }}
+{%- endif %}
+!
+hostname {{ hostname }}
+!
+snmp-server community {{ snmp.community }} rw
+snmp-server host {{ snmp.host }} version {{ snmp.version }} {{ snmp.community }}
+!
+spanning-tree mode mstp
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+{%- if vlans %}
+vlan {{ vlans | join(',') }}
+!
+{%- endif %}
+management api gnmi
+   transport grpc default
+!
+management api netconf
+   transport ssh default
+!
+{%- for interface in interfaces %}
+interface {{ interface.name }}
+{%- for command in interface.commands %}
+   {{ command }}
+{%- endfor %}
+!
+{%- endfor %}
+{%- if virtual_router_mac %}
+ip virtual-router mac-address {{ virtual_router_mac }}
+!
+{%- endif %}
+ip routing
+!
+ipv6 unicast-routing
+!
+{%- for route in ip_route %}
+ip route {{ route.destination }} {{ route.next_hop }}
+{%- endfor %}
+!
+ipv6 route {{ ipv6_route.destination }} {{ ipv6_route.next_hop }}
+!
+{%- if bgp %}
+router bgp {{ bgp.process_id }}
+{%- for neighbor in bgp.neighbors %}
+   neighbor {{ neighbor.ipv4 or neighbor.ipv6 }} remote-as {{ neighbor.remote_as }}
+{%- endfor %}
+   !
+   address-family ipv4
+   {%- for neighbor in bgp.address_family.ipv4.activate %}
+      neighbor {{ neighbor }} activate
+   {%- endfor %}
+      redistribute {{ bgp.address_family.ipv4.redistribute }}
+   !
+   address-family ipv6
+   {%- for neighbor in bgp.address_family.ipv6.activate %}
+      neighbor {{ neighbor }} activate
+   {%- endfor %}
+      redistribute {{ bgp.address_family.ipv6.redistribute }}
+!
+{%- endif %}
+router multicast
+   ipv4
+      software-forwarding kernel
+   !
+   ipv6
+      software-forwarding kernel
+!
+{%- if ospf %}
+router ospf {{ ospf.process_id }}
+{%- if ospf.redistribute %}
+   redistribute {{ ospf.redistribute }}
+{%- endif %}
+{%- for net in ospf.networks %}
+   network {{ net.network }} area {{ net.area }}
+{%- endfor %}
+   max-lsa 12000
+!
+{%- endif %}
+{%- if ospfv3 %}
+ipv6 router ospf {{ ospfv3.process_id }}
+{%- if ospfv3.redistribute %}
+   redistribute {{ ospfv3.redistribute }}
+{%- endif %}
+!
+{%- endif %}
+end
