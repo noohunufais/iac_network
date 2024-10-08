@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %} Add Device {% endblock %}
+
+{% block nav %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="/static/cu-logo.webp" alt="" width="30" height="24" class="d-inline-block align-text-top">
+    </a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:3000/dashboards" target="_blank">Grafana</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+    
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-5">
+  <form method="POST" action="{{ url_for('test_form') }}">
+
+      <!-- VLAN Button to Expand the Form -->
+      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseVLAN" aria-expanded="false" aria-controls="collapseVLAN">
+          VLANs
+      </button>
+      
+      <div class="collapse" id="collapseVLAN">
+          <div class="card card-body mt-2">
+              <div id="vlan-container">
+                  <!-- VLAN entries will be dynamically added here -->
+              </div>
+
+              <!-- Add and Delete buttons for VLAN entries -->
+              <div class="d-flex justify-content-start my-2">
+                  <button type="button" class="btn btn-primary me-2" id="add-vlan">Add</button>
+                  <button type="button" class="btn btn-danger" id="delete-vlan">Delete</button>
+              </div>
+          </div>
+      </div>
+
+      <br>
+      <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+</div>
+
+<!-- JavaScript to handle adding/removing VLAN fields -->
+<script>
+  $(document).ready(function() {
+      let vlanCount = 0; // Counter to keep track of VLAN entries
+
+      // Function to add a new VLAN entry
+      $('#add-vlan').on('click', function() {
+          vlanCount++;
+          let vlanEntry = `
+              <div class="vlan-entry form-group row" data-vlan-id="${vlanCount}">
+                  <label class="col-md-1 col-form-label">${vlanCount}.</label>
+                  <div class="col-md-4">
+                      <input type="text" name="vlan[]" class="form-control" placeholder="VLAN Number" required>
+                  </div>
+                  <div class="col-md-4">
+                      <input type="text" name="vlan_name[]" class="form-control" placeholder="VLAN Name">
+                  </div>
+              </div>`;
+          $('#vlan-container').append(vlanEntry);
+      });
+
+      // Function to delete the last VLAN entry
+      $('#delete-vlan').on('click', function() {
+          if (vlanCount > 0) {
+              $(`[data-vlan-id="${vlanCount}"]`).remove();
+              vlanCount--;
+          }
+      });
+  });
+</script>
+
+
+{% endblock %}
+
+
+
