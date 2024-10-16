@@ -25,36 +25,133 @@
 {% block content %}
 
 <div class="container mt-5">
-  <form method="POST" action="{{ url_for('test_form') }}">
+    <form method="POST" action="{{ url_for('test_form') }}">
 
-      <!-- VLAN Button to Expand the Form -->
-      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseVLAN" aria-expanded="false" aria-controls="collapseVLAN">
-          VLANs
-      </button>
-      
-      <div class="collapse" id="collapseVLAN">
-          <div class="card card-body mt-2">
-              <div id="vlan-container">
-                  <!-- VLAN entries will be dynamically added here -->
-              </div>
+        <!-- VLAN Button to Expand the Form -->
+        <button class="btn btn-secondary w-25 mb-2" type="button" data-toggle="collapse" data-target="#collapseVLAN" aria-expanded="false" aria-controls="collapseVLAN">
+            VLAN
+        </button>
+        
+        <div class="collapse" id="collapseVLAN">
+            <div class="card card-body mt-2">
+                <div id="vlan-container">
+                    <!-- VLAN entries will be dynamically added here -->
+                </div>
 
-              <!-- Add and Delete buttons for VLAN entries -->
-              <div class="d-flex justify-content-start my-2">
-                  <button type="button" class="btn btn-primary me-2" id="add-vlan">Add</button>
-                  <button type="button" class="btn btn-danger" id="delete-vlan">Delete</button>
-              </div>
-          </div>
-      </div>
+                <!-- Add and Delete buttons for VLAN entries -->
+                <div class="d-flex justify-content-start my-2">
+                    <button type="button" class="btn btn-primary me-2" id="add-vlan">Add</button>
+                    <button type="button" class="btn btn-danger" id="delete-vlan">Delete</button>
+                </div>
+            </div>
+        </div>
 
-      <br>
-      <button type="submit" class="btn btn-success">Submit</button>
-  </form>
+        <br>
+
+        <!-- Interfaces Button to Expand the Form -->
+        <button class="btn btn-secondary w-25 mb-2" type="button" data-toggle="collapse" data-target="#collapseInterface" aria-expanded="false" aria-controls="collapseInterface">
+            Interface
+        </button>
+
+        <div class="collapse" id="collapseInterface">
+            <div class="card card-body mt-2">
+                <div id="interface-container">
+                    <!-- Interface entries will be dynamically added here -->
+                </div>
+
+                <div class="d-flex justify-content-start my-2">
+                    <button type="button" class="btn btn-primary me-2" id="add-interface">Add</button>
+                    <button type="button" class="btn btn-danger" id="delete-interface">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <!-- IPv4 Static Route Section -->
+        <button class="btn btn-secondary w-25 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIPv4Route" aria-expanded="false" aria-controls="collapseIPv4Route">
+            IPv4 Static Route
+        </button>
+        <div class="collapse" id="collapseIPv4Route">
+            <div class="card card-body mt-2">
+                <div id="ipv4-route-container"></div>
+                <div class="d-flex justify-content-start my-2">
+                    <button type="button" class="btn btn-primary me-2" id="add-ipv4-route">Add</button>
+                    <button type="button" class="btn btn-danger" id="delete-ipv4-route">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <!-- IPv6 Static Route Section -->
+        <button class="btn btn-secondary w-25 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIPv6Route" aria-expanded="false" aria-controls="collapseIPv6Route">
+            IPv6 Static Route
+        </button>
+        <div class="collapse" id="collapseIPv6Route">
+            <div class="card card-body mt-2">
+                <div id="ipv6-route-container"></div>
+                <div class="d-flex justify-content-start my-2">
+                    <button type="button" class="btn btn-primary me-2" id="add-ipv6-route">Add</button>
+                    <button type="button" class="btn btn-danger" id="delete-ipv6-route">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+       <!-- Logging Section -->
+        <button class="btn btn-secondary w-25 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLogging" aria-expanded="false" aria-controls="collapseLogging">
+            Logging
+        </button>
+        <div class="collapse" id="collapseLogging">
+            <div class="card card-body mt-2">
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">Trap Type</label>
+                    <div class="col-md-4">
+                        <select name="log_trap_type" class="form-control" required>
+                            <option value="" disabled selected>Select Trap Type</option>
+                            <option value="emergencies">Emergencies</option>
+                            <option value="alerts">Alerts</option>
+                            <option value="critical">Critical</option>
+                            <option value="errors">Errors</option>
+                            <option value="warnings">Warnings</option>
+                            <option value="notifications">Notifications</option>
+                            <option value="informational">Informational</option>
+                            <option value="debugging">Debugging</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label class="col-md-2 col-form-label">Host IP</label>
+                    <div class="col-md-4">
+                        <input type="text" name="log_host_ip" class="form-control" placeholder="Enter Host IP" required>
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label class="col-md-2 col-form-label">Source Address</label>
+                    <div class="col-md-4">
+                        <input type="text" name="log_source_address" class="form-control" placeholder="Enter Source Address" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <br>
+
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
 </div>
 
 <!-- JavaScript to handle adding/removing VLAN fields -->
 <script>
   $(document).ready(function() {
       let vlanCount = 0; // Counter to keep track of VLAN entries
+      let interfaceCount = 0; // Counter for Interface entries
+      let ipv4RouteCount = 0;
+      let ipv6RouteCount = 0;
 
       // Function to add a new VLAN entry
       $('#add-vlan').on('click', function() {
@@ -79,6 +176,102 @@
               vlanCount--;
           }
       });
+
+      // Function to add a new Interface entry
+      $('#add-interface').on('click', function() {
+            interfaceCount++;
+            let interfaceEntry = `
+                <div class="interface-entry form-group row" data-interface-id="${interfaceCount}">
+                    <label class="col-md-1 col-form-label">${interfaceCount}.</label>
+                    <div class="interface-entry-data col-md-9 form-group row">
+                        <div class="col-md-3">
+                            <input type="text" name="interface_name[]" class="form-control" placeholder="Interface Name" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="ipv4_address[]" class="form-control" placeholder="IPv4 Address" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="ipv4_subnet[]" class="form-control" placeholder="IPv4 Subnet Mask" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="ipv6_address[]" class="form-control" placeholder="IPv6 Address">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="ipv6_prefix[]" class="form-control" placeholder="IPv6 Prefix">
+                        </div>
+                        <div class="col-md-1 d-flex align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="switchport[]" value="1">
+                                <label class="form-check-label">Switchport</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            $('#interface-container').append(interfaceEntry);
+        });
+
+        // Function to delete the last Interface entry
+        $('#delete-interface').on('click', function() {
+            if (interfaceCount > 0) {
+                $(`[data-interface-id="${interfaceCount}"]`).remove();
+                interfaceCount--;
+            }
+        });
+
+    // Function to add a new IPv4 Static Route entry
+    $('#add-ipv4-route').on('click', function() {
+        ipv4RouteCount++;
+        let ipv4RouteEntry = `
+            <div class="ipv4-route-entry form-group row" data-ipv4-route-id="${ipv4RouteCount}">
+                <label class="col-md-1 col-form-label">${ipv4RouteCount}.</label>
+                <div class="col-md-3">
+                    <input type="text" name="ipv4_dest_network[]" class="form-control" placeholder="Destination Network" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="ipv4_subnet[]" class="form-control" placeholder="Subnet Mask" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="ipv4_next_hop[]" class="form-control" placeholder="Next Hop Address" required>
+                </div>
+            </div>`;
+        $('#ipv4-route-container').append(ipv4RouteEntry);
+    });
+
+    // Function to delete the last IPv4 Static Route entry
+    $('#delete-ipv4-route').on('click', function() {
+        if (ipv4RouteCount > 0) {
+            $(`[data-ipv4-route-id="${ipv4RouteCount}"]`).remove();
+            ipv4RouteCount--;
+        }
+    });
+
+    // Function to add a new IPv6 Static Route entry
+    $('#add-ipv6-route').on('click', function() {
+        ipv6RouteCount++;
+        let ipv6RouteEntry = `
+            <div class="ipv6-route-entry form-group row" data-ipv6-route-id="${ipv6RouteCount}">
+                <label class="col-md-1 col-form-label">${ipv6RouteCount}.</label>
+                <div class="col-md-3">
+                    <input type="text" name="ipv6_dest_network[]" class="form-control" placeholder="Destination Network" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="ipv6_prefix[]" class="form-control" placeholder="Prefix" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="ipv6_next_hop[]" class="form-control" placeholder="Next Hop Address" required>
+                </div>
+            </div>`;
+        $('#ipv6-route-container').append(ipv6RouteEntry);
+    });
+
+    // Function to delete the last IPv6 Static Route entry
+    $('#delete-ipv6-route').on('click', function() {
+        if (ipv6RouteCount > 0) {
+            $(`[data-ipv6-route-id="${ipv6RouteCount}"]`).remove();
+            ipv6RouteCount--;
+        }
+    });
+
   });
 </script>
 
