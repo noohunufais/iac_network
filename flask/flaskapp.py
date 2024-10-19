@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request
 import getconfig
 app = Flask(__name__)
 
@@ -10,8 +10,8 @@ def hello():
 def add_device():
     if request.method == 'GET':
         return render_template('add_device.html')
-    else:
-        return request.form
+
+    return request.form
 
 
 @app.route("/golden_config", methods=['GET'])
@@ -105,7 +105,7 @@ def test_form():
         print("Basic Settings Data:")
         print(f"Hostname: {hostname}")
         print(f"Username: {username}")
-        print(f"Password: {password}") 
+        print(f"Password: {password}")
         print(f"Privilege: {privilege}")
         print(f"Role: {role}")
 
@@ -118,7 +118,7 @@ def test_form():
 
         return request.form
     return render_template('test_form.html')
-        
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
