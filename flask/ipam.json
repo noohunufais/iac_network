@@ -1,0 +1,192 @@
+{
+    "R1": {
+        "username": "admin",
+        "password": "hmuzz",
+        "interfaces": {
+            "Management0": {
+                "ipv4": "172.20.20.11/24",
+                "ipv6": "2001:172:20:20::11/80"
+            },
+            "Ethernet1": {
+                "ipv4": "",
+                "ipv6": ""
+            },
+            "Ethernet2": {
+                "ipv4": "",
+                "ipv6": ""
+            },
+            "Ethernet3": {
+                "ipv4": "10.0.60.1/24",
+                "ipv6": "2060::1/64"
+            },
+            "Vlan10": {
+                "ipv4": "10.0.10.1/24",
+                "ipv6": "2010::1/64"
+            },
+            "Vlan20": {
+                "ipv4": "10.0.20.1/24",
+                "ipv6": "2020::1/64"
+            },
+            "Vlan30": {
+                "ipv4": "",
+                "ipv6": "2030::1/64"
+            }
+        }
+    },
+    "R2": {
+        "username": "admin",
+        "password": "hmuzz",
+        "interfaces": {
+            "Management0": {
+                "ipv4": "172.20.20.12/24",
+                "ipv6": "2001:172:20:20::12/80"
+            },
+            "Ethernet1": {
+                "ipv4": "",
+                "ipv6": ""
+            },
+            "Ethernet2": {
+                "ipv4": "",
+                "ipv6": ""
+            },
+            "Ethernet3": {
+                "ipv4": "10.0.60.2/24",
+                "ipv6": "2060::2/64"
+            },
+            "Vlan10": {
+                "ipv4": "10.0.10.2/24",
+                "ipv6": "2010::2/64"
+            },
+            "Vlan20": {
+                "ipv4": "10.0.20.2/24",
+                "ipv6": "2020::2/64"
+            },
+            "Vlan30": {
+                "ipv4": "",
+                "ipv6": "2030::2/64"
+            }
+        }
+    },
+    "R3": {
+        "username": "admin",
+        "password": "hmuzz",
+        "interfaces": {
+            "Management0": {
+                "ipv4": "172.20.20.13/24",
+                "ipv6": "2001:172:20:20::13/80"
+            },
+            "Ethernet1": {
+                "ipv4": "10.0.70.3/24",
+                "ipv6": "2070::3/64"
+            },
+            "Ethernet2": {
+                "ipv4": "10.0.60.3/24",
+                "ipv6": "2060::3/64"
+            },
+            "Ethernet3": {
+                "ipv4": "10.0.80.3/24",
+                "ipv6": "2080::3/64"
+            }
+        }
+    },
+    "R4": {
+        "username": "admin",
+        "password": "hmuzz",
+        "interfaces": {
+            "Management0": {
+                "ipv4": "172.20.20.14/24",
+                "ipv6": "2001:172:20:20::14/80"
+            },
+            "Ethernet1": {
+                "ipv4": "10.0.70.4/24",
+                "ipv6": "2070::4/64"
+            },
+            "Ethernet2": {
+                "ipv4": "10.0.60.4/24",
+                "ipv6": "2060::4/64"
+            },
+            "Ethernet3": {
+                "ipv4": "10.0.90.4/24",
+                "ipv6": "2090::4/64"
+            }
+        }
+    },
+    "R5": {
+        "username": "admin",
+        "password": "hmuzz",
+        "interfaces": {
+            "Management0": {
+                "ipv4": "172.20.20.15/24",
+                "ipv6": "2001:172:20:20::15/80"
+            },
+            "Ethernet1": {
+                "ipv4": "10.0.80.5/24",
+                "ipv6": "2080::5/64"
+            },
+            "Ethernet2": {
+                "ipv4": "10.0.90.5/24",
+                "ipv6": "2090::5/64"
+            },
+            "Ethernet3": {
+                "ipv4": "10.0.100.5/24",
+                "ipv6": "2100::5/64"
+            }
+        }
+    },
+    "S1": {
+        "username": "admin",
+        "password": "hmuzz",
+        "interfaces": {
+            "Management0": {
+                "ipv4": "172.20.20.16/24",
+                "ipv6": "2001:172:20:20::16/80"
+            },
+            "Vlan10": {
+                "ipv4": "10.0.10.11/24",
+                "ipv6": ""
+            }
+        }
+    },
+    "S2": {
+        "username": "admin",
+        "password": "hmuzz",
+        "interfaces": {
+            "Management0": {
+                "ipv4": "172.20.20.17/24",
+                "ipv6": "2001:172:20:20::17/80"
+            },
+            "Vlan10": {
+                "ipv4": "10.0.10.12/24",
+                "ipv6": ""
+            }
+        }
+    },
+    "S3": {
+        "username": "admin",
+        "password": "hmuzz",
+        "interfaces": {
+            "Management0": {
+                "ipv4": "172.20.20.18/24",
+                "ipv6": "2001:172:20:20::18/80"
+            },
+            "Vlan1": {
+                "ipv4": "10.0.60.13/24",
+                "ipv6": ""
+            }
+        }
+    },
+    "S4": {
+        "username": "admin",
+        "password": "hmuzz",
+        "interfaces": {
+            "Management0": {
+                "ipv4": "172.20.20.19/24",
+                "ipv6": "2001:172:20:20::19/80"
+            },
+            "Vlan1": {
+                "ipv4": "10.0.60.14/24",
+                "ipv6": ""
+            }
+        }
+    }
+}

@@ -22,6 +22,14 @@ def golden_config():
 @app.route('/test_form', methods=['GET', 'POST'])
 def test_form():
     if request.method == 'POST':
+
+        # Capture Basic Settings data
+        hostname = request.form.get('hostname')
+        username = request.form.get('username')
+        password = request.form.get('password')
+        privilege = request.form.get('privilege')
+        role = request.form.get('role')
+
         # Capture VLAN data
         vlan_numbers = request.form.getlist('vlan[]')
         vlan_names = request.form.getlist('vlan_name[]')
@@ -49,6 +57,23 @@ def test_form():
         log_host_ip = request.form.get('log_host_ip')
         log_source_address = request.form.get('log_source_address')
 
+        # Capture SNMP data
+        snmp_version = request.form.get('snmp_version')
+        community_string = request.form.get('community_string')
+        snmp_permission = request.form.get('snmp_permission')
+        snmp_host_ip = request.form.get('snmp_host_ip')
+
+        # Capture OSPFv2 Network data
+        ospfv2_networks = request.form.getlist('ospfv2_network[]')
+        ospfv2_subnet_masks = request.form.getlist('ospfv2_subnet_mask[]')
+        ospfv2_areas = request.form.getlist('ospfv2_area[]')
+
+        # Capture Redistribute data
+        ospfv2_redistribute_bgp = request.form.get('ospfv2_redistribute_bgp')
+        ospfv2_redistribute_rip = request.form.get('ospfv2_redistribute_rip')
+        ospfv2_redistribute_static = request.form.get('ospfv2_redistribute_static')
+        ospfv2_redistribute_connected = request.form.get('ospfv2_redistribute_connected')
+
         # Debugging: Print the captured data to the console (for testing purposes)
         print("VLAN Data:")
         for i, (vlan_num, vlan_name) in enumerate(zip(vlan_numbers, vlan_names), start=1):
@@ -70,6 +95,26 @@ def test_form():
         print(f"Trap Type: {log_trap_type}")
         print(f"Host IP: {log_host_ip}")
         print(f"Source Address: {log_source_address}")
+
+        print("SNMP Data:")
+        print(f"SNMP Version: {snmp_version}")
+        print(f"Community String: {community_string}")
+        print(f"Permission: {snmp_permission}")
+        print(f"Host IP: {snmp_host_ip}")
+
+        print("Basic Settings Data:")
+        print(f"Hostname: {hostname}")
+        print(f"Username: {username}")
+        print(f"Password: {password}") 
+        print(f"Privilege: {privilege}")
+        print(f"Role: {role}")
+
+        print("OSPFv2 Network Data:")
+        for i, (network, subnet, area) in enumerate(zip(ospfv2_networks, ospfv2_subnet_masks, ospfv2_areas), start=1):
+            print(f"Network {i}: Network={network}, Subnet Mask={subnet}, Area Number={area}")
+
+        print("\nRedistribute Options:")
+        print(f"BGP: {ospfv2_redistribute_bgp}, RIP: {ospfv2_redistribute_rip}, Static: {ospfv2_redistribute_static}, Connected: {ospfv2_redistribute_connected}")
 
         return request.form
     return render_template('test_form.html')
