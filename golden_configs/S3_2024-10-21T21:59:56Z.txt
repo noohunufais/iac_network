@@ -1,0 +1,68 @@
+! Command: show running-config
+! device: S3 (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret sha512 $6$u/PiTuwxDVE7D22j$y0P81Jcq8qq5w.WrfDgXY1YbCEQUvzJpuxmsvRRRsCwHKQMQNspiLIOuPND8fAAwgv35ZylgkJAll9aROTZoR1
+!
+management api http-commands
+   no shutdown
+!
+no service interface inactive port-id allocation disabled
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+logging trap notifications
+logging host 10.0.60.100
+logging source-address 10.0.60.13
+!
+hostname S3
+!
+snmp-server community netman rw
+snmp-server host 10.0.60.100 version 2c netman
+!
+spanning-tree mode mstp
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+management api gnmi
+   transport grpc default
+!
+management api netconf
+   transport ssh default
+!
+interface Ethernet1
+!
+interface Ethernet2
+!
+interface Ethernet3
+!
+interface Ethernet4
+!
+interface Management0
+   ip address 172.20.20.18/24
+   ipv6 address 2001:172:20:20::18/80
+!
+interface Vlan1
+   ip address 10.0.60.13/24
+!
+ip routing
+!
+ipv6 unicast-routing
+!
+ip route 0.0.0.0/0 172.20.20.1
+!
+ipv6 route ::/0 2001:172:20:20::1
+!
+router multicast
+   ipv4
+      software-forwarding kernel
+   !
+   ipv6
+      software-forwarding kernel
+!
+end
