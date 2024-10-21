@@ -15,7 +15,7 @@ def extract_device_info(data):
         management_ipv4 = details['interfaces'].get('Management0', {}).get('ipv4', 'N/A')
 
         device_info[device] = {
-            'device_type': 'cisco_ios',
+            'device_type': 'arista_eos',
             'host': management_ipv4.split('/')[0],  # Removing the subnet mask
             'username': username,
             'password': password,

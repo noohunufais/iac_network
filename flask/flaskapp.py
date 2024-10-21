@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request
 import getconfig
+import net_apps
 app = Flask(__name__)
 
 @app.route("/")
-def hello():
+def index():
     return render_template('index.html')
 
 @app.route("/add_device", methods=['GET','POST'])
@@ -17,6 +18,19 @@ def add_device():
 @app.route("/golden_config", methods=['GET'])
 def golden_config():
     return getconfig.get_golden_config()
+
+
+@app.route("/tools", methods=['GET', 'POST'])
+def tools():
+    if request.method == 'POST':
+        device_name = request.form['deviceName']
+        operation = request.form['operation']
+
+        output = net_apps.net_apps(device_name, operation)
+        
+        return f"<pre>{output}</pre>"
+    return render_template('tools.html')
+    
 
 
 @app.route('/test_form', methods=['GET', 'POST'])
