@@ -16,6 +16,7 @@ class TestCheckIP(unittest.TestCase):
         self.assertFalse(check_ip('1.2.3.4.5')) 
         self.assertFalse(check_ip('192.168.1.')) 
         self.assertFalse(check_ip('one.two.three.four')) 
+        self.assertTrue(check_ip('1.1.1.1'))
 
 if __name__ == '__main__':
     unittest.main()
