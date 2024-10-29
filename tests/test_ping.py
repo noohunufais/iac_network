@@ -21,7 +21,7 @@ class TestCheckIP(unittest.TestCase):
         self.assertFalse(ping_check('10.0.10.12'))
         self.assertFalse(ping_check('10.0.60.13')) 
         self.assertFalse(ping_check('10.0.60.14')) 
-
+        
 
 if __name__ == '__main__':
     unittest.main()
