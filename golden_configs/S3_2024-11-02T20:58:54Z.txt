@@ -1,9 +1,9 @@
 ! Command: show running-config
-! device: S4 (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
+! device: S3 (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
 !
 no aaa root
 !
-username admin privilege 15 role network-admin secret sha512 $6$.3BscOFf7Jg92SGH$/EM3C0KdlQbP1.2HSXMXufL/1nsB4wMPjAMWjm78k/v17K.IQqjQoxg8kgOmPLiWrISLYtzrVGjYZQ1Qd6wyq.
+username admin privilege 15 role network-admin secret sha512 $6$0we3vJaJvYOgqYO.$WiLooTvVOor0Ff0ito55rrApYf3s.rgQsAVW61OVRqO.6FCYSQoqP0NoUv6XSazscdpGRKMoKwBxo3xDRpjSv0
 !
 management api http-commands
    no shutdown
@@ -16,9 +16,9 @@ service routing protocols model multi-agent
 !
 logging trap notifications
 logging host 10.0.60.100
-logging source-address 10.0.60.14
+logging source-address 10.0.60.13
 !
-hostname S4
+hostname S3
 !
 snmp-server community netman rw
 snmp-server host 10.0.60.100 version 2c netman
@@ -44,11 +44,11 @@ interface Ethernet3
 interface Ethernet4
 !
 interface Management0
-   ip address 172.20.20.19/24
-   ipv6 address 2001:172:20:20::19/80
+   ip address 172.20.20.18/24
+   ipv6 address 2001:172:20:20::18/80
 !
 interface Vlan1
-   ip address 10.0.60.14/24
+   ip address 10.0.60.13/24
 !
 ip routing
 !

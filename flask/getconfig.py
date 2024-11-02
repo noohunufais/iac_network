@@ -3,11 +3,10 @@ from netmiko import ConnectHandler
 from datetime import datetime
 from threading import Thread
 
-# Placeholder for the file names generated
-file_names = []
+
 
 # Function to connect to the device and retrieve the configuration
-def conf(ip, device_type, username, password):
+def conf(ip, device_type, username, password, file_names):
     device = {
         'device_type': device_type, 
         'username': username, 
@@ -48,6 +47,9 @@ def get_golden_config():
 
     threads = []
 
+    # Placeholder for the file names generated
+    file_names = []
+
     # Loop through the devices in the JSON
     for device, details in ipam_data.items():
         username = details.get('username')
@@ -58,7 +60,7 @@ def get_golden_config():
         if 'Management0' in interfaces and interfaces['Management0']['ipv4']:
             ip = interfaces['Management0']['ipv4'].split('/')[0]  # Extract the IP address
             # Start the thread to collect the configuration
-            thread = Thread(target=conf, args=(ip, 'arista_eos', username, password))
+            thread = Thread(target=conf, args=(ip, 'arista_eos', username, password, file_names))
             thread.start()
             threads.append(thread)
 

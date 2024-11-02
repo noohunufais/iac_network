@@ -17,7 +17,9 @@ def add_device():
 
 @app.route("/golden_config", methods=['GET'])
 def golden_config():
-    return getconfig.get_golden_config()
+
+    golden_config_data = sorted(getconfig.get_golden_config())
+    return render_template('results.html', golden_config=golden_config_data )
 
 
 @app.route("/tools", methods=['GET', 'POST'])

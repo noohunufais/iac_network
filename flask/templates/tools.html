@@ -21,34 +21,80 @@
     
 {% endblock %}
 
+
+{% block header %}
+
+<style>
+  /* Basic reset */
+  body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: white; /* Global text color for general content */
+  }
+
+  /* Content area styles */
+  .content {
+      background-image: url('/static/bg-image.jpg'); /* Background image */
+      background-size: cover; /* Cover the entire area */
+      background-repeat: no-repeat; /* Prevent repeating */
+      background-position: center; /* Center the image */
+      height: 94vh; /* Full viewport height */
+      display: flex; /* Flexbox for centering */
+      align-items: center; /* Center vertically */
+      justify-content: center; /* Center horizontally */
+      text-align: center; /* Center align the text */
+  }
+
+  /* Card styles for the form */
+  .form-card {
+      background: rgba(255, 255, 255, 0.9); /* Semi-transparent white for brightness */
+      border-radius: 10px; /* Rounded corners */
+      padding: 30px; /* Padding around the form */
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+      color: #333; /* Dark text color for readability */
+  }
+
+  /* Specific styles for the header */
+  h2 {
+      margin-bottom: 20px; /* Space below the title */
+      color: #333; /* Ensure header is dark */
+  }
+</style>
+
+{% endblock %}
+
 {% block content %}
 
-<div class="container mt-5">
-    <h2>Device Operation</h2>
-    <form method="POST" action="/tools">
-      <!-- Device Name Input -->
-      <div class="mb-3">
-        <label for="deviceName" class="form-label">Device Name</label>
-        <input type="text" class="form-control" id="deviceName" name="deviceName" placeholder="Enter device name" required>
-      </div>
-  
-      <!-- Operations Dropdown -->
-      <div class="mb-3">
-        <label for="operation" class="form-label">Select Operation</label>
-        <select class="form-select" id="operation" name="operation" required>
-          <option value="" disabled selected>Select an operation</option>
-          <option value="routeTable">Route Table</option>
-          <option value="ipConnectivity">IP Connectivity</option>
-          <option value="ospfNeighborship">OSPF Neighborship</option>
-          <option value="bgpNeighborship">BGP Neighborship</option>
-          <option value="configComparison">Configuration Comparison</option>
-          <option value="cpuUtilization">CPU Utilization</option>
-        </select>
-      </div>
-  
-      <!-- Submit Button -->
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-  </div>
-  
-  {% endblock %}
+<div class="content">
+    <div class="form-card">
+        <h2 class="card-title">Device Operation</h2>
+        <form method="POST" action="/tools">
+            <!-- Device Name Input -->
+            <div class="mb-3">
+                <label for="deviceName" class="form-label">Device Name</label>
+                <input type="text" class="form-control" id="deviceName" name="deviceName" placeholder="Enter device name" required>
+            </div>
+
+            <!-- Operations Dropdown -->
+            <div class="mb-3">
+                <label for="operation" class="form-label">Select Operation</label>
+                <select class="form-select" id="operation" name="operation" required>
+                    <option value="" disabled selected>Select an operation</option>
+                    <option value="routeTable">Route Table</option>
+                    <option value="ipConnectivity">IP Connectivity</option>
+                    <option value="ospfNeighborship">OSPF Neighborship</option>
+                    <option value="bgpNeighborship">BGP Neighborship</option>
+                    <option value="configComparison">Configuration Comparison</option>
+                    <option value="cpuUtilization">CPU Utilization</option>
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
