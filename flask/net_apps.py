@@ -58,6 +58,12 @@ def execute_command(connection, command_choice, device_name, mgmt_ip):
         output = connection.send_command(command)
     elif command_choice == "configComparison":  # Configuration comparison
         output = compare_config(connection, device_name)
+    elif command_choice == "runningConfig":  # Show running configuration
+        command = "show running-config"
+        output = connection.send_command(command)
+    elif command_choice == "macaddrTable":  # Show mac address table
+        command = "show mac address-table "
+        output = connection.send_command(command)
     else:
         output = "Invalid command choice."
     
@@ -77,7 +83,6 @@ def ping_device(host):
 # Function to compare running configuration with local file using diff
 def compare_config(connection, device_name):
     # Get the running configuration from the device
-    connection.enable()
     running_config = connection.send_command("show running-config")
 
     # Save the running configuration to a temporary file
@@ -143,13 +148,15 @@ def net_apps(device_name, command_choice):
     # print("4 - BGP Neighborship")
     # print("5 - Configuration Comparison")
     # print("6 - CPU Utilization")
+    # print("7 - Show Running Config")
     # command_choice = input("Your choice: ")
 
     username, password, mgmt_ip = get_device_info(device_name, ipam_data)
 
-    if command_choice in ["routeTable", "ospfNeighborship", "bgpNeighborship", "configComparison"]:  # For commands that require a device connection
+    if command_choice in ["routeTable", "ospfNeighborship", "bgpNeighborship", "configComparison", "runningConfig", "macaddrTable"]:  # For commands that require a device connection
         connection = connect_to_device(device_name, ipam_data)
         if connection:
+            connection.enable()
             output = execute_command(connection, command_choice, device_name, mgmt_ip)
             if output:
                 print(f"Command output:\n{output}")

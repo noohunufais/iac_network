@@ -1,12 +1,35 @@
 ! Command: show running-config
-! device: R1 (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
+! device: R2 (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
 !
 no aaa root
 !
-username admin privilege 15 role network-admin secret sha512 $6$dUH.yACWwBvT6e4m$yXX0hORsyWpb6HFeR2mcNVcCsCa7nkcuya5X5WYcsJvpCmLwBJiwyfZlgzoqESJx1A5LTjKl3TMmybge1MkVV0
+username admin privilege 15 role network-admin secret sha512 $6$6khen.eZeIMEKiIM$WeV4ndWGgEbuO5vftSDyis9X5h7Wy8Z3CjOwzkfocauAzeMaW2syMJtjfwwHn/PLfzBRGte4GbNtm8RpGbDFh1
 !
 management api http-commands
    no shutdown
+!
+dhcp server
+   subnet 10.0.10.0/24
+      range 10.0.10.4 10.0.10.254
+      name VLAN_10
+      default-gateway 10.0.10.3
+   !
+   subnet 10.0.20.0/24
+      range 10.0.20.4 10.0.20.254
+      name VLAN_20
+      default-gateway 10.0.20.3
+   !
+   subnet 2010::/64
+      range 2010::4 2010::11
+      name VLAN_10
+   !
+   subnet 2020::/64
+      range 2020::4 2020::11
+      name VLAN_20
+   !
+   subnet 2030::/64
+      range 2030::4 2030::11
+      name VLAN_30
 !
 no service interface inactive port-id allocation disabled
 !
@@ -16,9 +39,9 @@ service routing protocols model multi-agent
 !
 logging trap notifications
 logging host 10.0.60.100
-logging source-address 10.0.60.1
+logging source-address 10.0.60.2
 !
-hostname R1
+hostname R2
 !
 snmp-server community netman rw
 snmp-server host 10.0.60.100 version 2c netman
@@ -44,34 +67,39 @@ interface Ethernet2
 !
 interface Ethernet3
    no switchport
-   ip address 10.0.60.1/24
+   ip address 10.0.60.2/24
    ipv6 enable
-   ipv6 address 2060::1/64
+   ipv6 address 2060::2/24
    ipv6 ospf 1 area 0.0.0.0
 !
 interface Management0
-   ip address 172.20.20.11/24
-   ipv6 address 2001:172:20:20::11/80
+   ip address 172.20.20.12/24
+   ipv6 address 2001:172:20:20::12/80
 !
 interface Vlan10
-   ip address 10.0.10.1/24
+   ip address 10.0.10.2/24
+   dhcp server ipv4
+   dhcp server ipv6
    ipv6 enable
-   ipv6 address 2010::1/64
+   ipv6 address 2010::2/64
    ipv6 ospf 1 area 0.0.0.0
    ip virtual-router address 10.0.10.3
    ipv6 virtual-router address 2010::3
 !
 interface Vlan20
-   ip address 10.0.20.1/24
+   ip address 10.0.20.2/24
+   dhcp server ipv4
+   dhcp server ipv6
    ipv6 enable
-   ipv6 address 2020::1/64
+   ipv6 address 2020::2/64
    ipv6 ospf 1 area 0.0.0.0
    ip virtual-router address 10.0.20.3
    ipv6 virtual-router address 2020::3
 !
 interface Vlan30
+   dhcp server ipv6
    ipv6 enable
-   ipv6 address 2030::1/64
+   ipv6 address 2030::2/64
    ipv6 ospf 1 area 0.0.0.0
    ipv6 virtual-router address 2030::3
 !

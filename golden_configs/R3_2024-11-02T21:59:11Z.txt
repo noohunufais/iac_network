@@ -3,7 +3,7 @@
 !
 no aaa root
 !
-username admin privilege 15 role network-admin secret sha512 $6$kwisNVhTVN.MW51Q$6eqwpaZcqomGxemEL60Yz7emilr6ZOQTsqs049z0d.v0C62sBFcgTlbu7OlxHRJ9on3v.4j47LDycbBke2H3u1
+username admin privilege 15 role network-admin secret sha512 $6$prQUTXq/Ctnje29E$sOsn4RG1Usxo5fKu5/M0gdLCKEhv46WV38LmIqFwySnvr3RgrnJrxnnwgl97KELnGWJMGZEmX6Cwl4fyIo1K3.
 !
 management api http-commands
    no shutdown

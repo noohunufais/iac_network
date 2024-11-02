@@ -22,17 +22,30 @@ def golden_config():
     return render_template('results.html', golden_config=golden_config_data )
 
 
+# @app.route("/tools", methods=['GET', 'POST'])
+# def tools():
+#     if request.method == 'POST':
+#         device_name = request.form['deviceName']
+#         operation = request.form['operation']
+
+#         output = net_apps.net_apps(device_name, operation)
+        
+#         return f"<pre>{output}</pre>"
+#     return render_template('tools.html')
+    
+
 @app.route("/tools", methods=['GET', 'POST'])
 def tools():
     if request.method == 'POST':
         device_name = request.form['deviceName']
         operation = request.form['operation']
+        custom_command = request.form.get('customCommand') if operation == "custom" else None
 
-        output = net_apps.net_apps(device_name, operation)
+        output = net_apps(device_name, operation, custom_command)
         
         return f"<pre>{output}</pre>"
+
     return render_template('tools.html')
-    
 
 
 @app.route('/test_form', methods=['GET', 'POST'])

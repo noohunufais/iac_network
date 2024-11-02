@@ -1,9 +1,9 @@
 ! Command: show running-config
-! device: S1 (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
+! device: S3 (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
 !
 no aaa root
 !
-username admin privilege 15 role network-admin secret sha512 $6$OPQGxaHUVh13RqhE$6fQI1AU2AFWe/D2czMEaWSbaYy82.Z8oiSBGr3xq468azyz4t/vBZoLLxLi22ByoA0U7prOsaZATAK5q6fStI/
+username admin privilege 15 role network-admin secret sha512 $6$HySjAYWz2H/2kV.S$PkaFxgbPAx9EGOA9Zcs8ssdExNX4upuoWliN943QVWA19NjmzTtcdUUTEyUA7Me6wD1whsY9rqWbQYGccFDs2.
 !
 management api http-commands
    no shutdown
@@ -16,9 +16,9 @@ service routing protocols model multi-agent
 !
 logging trap notifications
 logging host 10.0.60.100
-logging source-address 10.0.10.11
+logging source-address 10.0.60.13
 !
-hostname S1
+hostname S3
 !
 snmp-server community netman rw
 snmp-server host 10.0.60.100 version 2c netman
@@ -29,8 +29,6 @@ system l1
    unsupported speed action error
    unsupported error-correction action error
 !
-vlan 10,20,30
-!
 management api gnmi
    transport grpc default
 !
@@ -38,30 +36,25 @@ management api netconf
    transport ssh default
 !
 interface Ethernet1
-   switchport mode trunk
 !
 interface Ethernet2
-   switchport mode trunk
 !
 interface Ethernet3
-   switchport access vlan 10
 !
 interface Ethernet4
-   switchport access vlan 20
 !
 interface Management0
-   ip address 172.20.20.16/24
-   ipv6 address 2001:172:20:20::16/80
+   ip address 172.20.20.18/24
+   ipv6 address 2001:172:20:20::18/80
 !
-interface Vlan10
-   ip address 10.0.10.11/24
+interface Vlan1
+   ip address 10.0.60.13/24
 !
 ip routing
 !
 ipv6 unicast-routing
 !
 ip route 0.0.0.0/0 172.20.20.1
-ip route 10.0.0.0/16 10.0.10.3
 !
 ipv6 route ::/0 2001:172:20:20::1
 !
