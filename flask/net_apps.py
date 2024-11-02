@@ -43,27 +43,24 @@ def connect_to_device(device_name, ipam_data):
         print("Missing device connection details.")
         return None
 
-# Step 4: Execute commands based on user choice
-def execute_command(connection, command_choice, device_name, mgmt_ip):
-    if command_choice == "routeTable":  # Route Table
-        command = "show ip route"
-        output = connection.send_command(command)
-    elif command_choice == "ipConnectivity":  # IP Connectivity check using local ping
+
+def execute_command(connection, command_choice, device_name, mgmt_ip, custom_command=None):
+    if command_choice == "custom" and custom_command:
+        output = connection.send_command(custom_command)
+    elif command_choice == "routeTable":
+        output = connection.send_command("show ip route")
+    elif command_choice == "ipConnectivity":
         output = ping_device(mgmt_ip)
-    elif command_choice == "ospfNeighborship":  # OSPF Neighborship
-        command = "show ip ospf neighbor"
-        output = connection.send_command(command)
-    elif command_choice == "bgpNeighborship":  # BGP Neighborship
-        command = "show ip bgp summary"
-        output = connection.send_command(command)
-    elif command_choice == "configComparison":  # Configuration comparison
+    elif command_choice == "ospfNeighborship":
+        output = connection.send_command("show ip ospf neighbor")
+    elif command_choice == "bgpNeighborship":
+        output = connection.send_command("show ip bgp summary")
+    elif command_choice == "configComparison":
         output = compare_config(connection, device_name)
-    elif command_choice == "runningConfig":  # Show running configuration
-        command = "show running-config"
-        output = connection.send_command(command)
-    elif command_choice == "macaddrTable":  # Show mac address table
-        command = "show mac address-table "
-        output = connection.send_command(command)
+    elif command_choice == "runningConfig":
+        output = connection.send_command("show running-config")
+    elif command_choice == "macaddrTable":
+        output = connection.send_command("show mac address-table")
     else:
         output = "Invalid command choice."
     
@@ -137,41 +134,30 @@ def get_cpu_utilization(mgmt_ip):
     except Exception as e:
         return f"Error retrieving CPU utilization: {e}"
 
-# Step 5: Main function to put everything together
-def net_apps(device_name, command_choice):
-    ipam_data = load_ipam_file()  # Load the IPAM data from the JSON file
-    # device_name = input("Enter the device name: ")
-    # print("Enter the command choice:")
-    # print("1 - Route Table")
-    # print("2 - IP Connectivity")
-    # print("3 - OSPF Neighborship")
-    # print("4 - BGP Neighborship")
-    # print("5 - Configuration Comparison")
-    # print("6 - CPU Utilization")
-    # print("7 - Show Running Config")
-    # command_choice = input("Your choice: ")
 
+def net_apps(device_name, command_choice, custom_command=None):
+    ipam_data = load_ipam_file()
     username, password, mgmt_ip = get_device_info(device_name, ipam_data)
 
-    if command_choice in ["routeTable", "ospfNeighborship", "bgpNeighborship", "configComparison", "runningConfig", "macaddrTable"]:  # For commands that require a device connection
+    if command_choice in ["routeTable", "ospfNeighborship", "bgpNeighborship", "configComparison", "runningConfig", "macaddrTable", "custom"]:
         connection = connect_to_device(device_name, ipam_data)
         if connection:
             connection.enable()
-            output = execute_command(connection, command_choice, device_name, mgmt_ip)
+            output = execute_command(connection, command_choice, device_name, mgmt_ip, custom_command)
             if output:
                 print(f"Command output:\n{output}")
                 return output
             connection.disconnect()
-    elif command_choice == "ipConnectivity":  # For the connectivity check that uses local ping
+    elif command_choice == "ipConnectivity":
         output = ping_device(mgmt_ip)
         print(output)
         return output
-    elif command_choice == "cpuUtilization":  # For SNMP CPU utilization check
+    elif command_choice == "cpuUtilization":
         output = get_cpu_utilization(mgmt_ip)
         print(output)
         return output
     else:
-        print("Invalid command choice. Please enter a number between 1 and 6.")
+        print("Invalid command choice.")
 
 if __name__ == "__main__":
     net_apps()
