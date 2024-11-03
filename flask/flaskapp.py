@@ -32,7 +32,7 @@ def tools():
 
         output = net_apps.net_apps(device_name, operation, custom_command)
         
-        return f"<pre>{output}</pre>"
+        return render_template('tools_output.html', output=output)
     
     else:
 
