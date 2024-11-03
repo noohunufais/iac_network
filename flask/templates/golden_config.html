@@ -23,64 +23,80 @@
 
 {% block header %}
 <style>
-  /* Apply background image styling to content wrapper */
-  .content {
-      background-image: url('/static/bg-image.jpg');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-  }
-
-  /* Centered container */
-  .container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-  }
-
-  /* Reset for clean layout */
+  /* Body and main content reset */
   body {
       margin: 0;
       font-family: Arial, sans-serif;
+  }
+
+  /* Content area styling */
+  .content {
+      background-image: url('/static/bg-image.jpg'); /* Use the same background */
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      height: 94vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px; /* Add padding for content spacing */
+  }
+
+  /* Output container */
+  .config-container {
+      background-color: rgba(255, 255, 255, 0.9); /* Light, semi-transparent white */
+      padding: 20px;
+      border-radius: 8px;
+      width: 80%;
+      max-width: 600px;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2); /* Softer shadow */
+      text-align: left; /* Align text to the left */
+  }
+
+  /* Title styling */
+  .config-container h2 {
+      font-size: 1.8em;
+      margin-bottom: 15px;
+      color: #007bff; /* Blue color for the title */
+      text-align: left;
+  }
+
+  /* List styling */
+  .config-list {
+      list-style-type: none; /* Remove default list styling */
+      padding: 0;
+      margin: 0;
+  }
+
+  .config-list li {
+      background-color: #f0f0f0; /* Light gray background for list items */
+      color: #333; /* Darker text color for readability */
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      font-size: 1.1em;
+      display: flex;
+      align-items: center;
+  }
+
+  /* Icon styling */
+  .config-list li .bi-check-circle {
+      color: #28a745; /* Bootstrap success green */
+      margin-right: 10px; /* Spacing between icon and text */
+      font-size: 1.2em;
   }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="content">
-    <div class="container d-flex justify-content-center align-items-center">
-        <div class="text-center" style="width: 100%; max-width: 600px;">
-            <h2 class="mb-4" style="font-weight: bold; background-color: #ffffff; color: #ff9800; display: inline-block; padding: 0.5em 1em; border-radius: 8px;">
-              Golden Configuration Files
-            </h2>
-            <div class="border rounded p-4" style="background-color: #ffffff; border: 3px solid #ff9800; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
-                <ul class="list-unstyled">
-                    {% for filename in golden_config %}
-                    <li class="mb-3">
-                        <div class="p-3 rounded" style="background-color: #f0f4c3;">
-                            <i class="bi bi-file-earmark-text-fill text-success me-2"></i>
-                            <span class="text-dark fw-bold">{{ filename }}</span>
-                        </div>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+    <div class="config-container">
+        <h2>Golden Configuration Files</h2>
+        <ul class="config-list">
+            {% for file in golden_config %}
+                <li><i class="bi bi-check-circle"></i> {{ file }}</li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
