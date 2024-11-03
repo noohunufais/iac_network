@@ -19,7 +19,7 @@ def add_device():
 def golden_config():
 
     golden_config_data = sorted(getconfig.get_golden_config())
-    return render_template('results.html', golden_config=golden_config_data )
+    return render_template('golden_config.html', golden_config=golden_config_data )
 
     
 
@@ -33,8 +33,11 @@ def tools():
         output = net_apps.net_apps(device_name, operation, custom_command)
         
         return f"<pre>{output}</pre>"
+    
+    else:
 
-    return render_template('tools.html')
+        devices_list = list(net_apps.load_ipam_file().keys())
+        return render_template('tools.html', devices_list=devices_list)
 
 
 @app.route('/test_form', methods=['GET', 'POST'])
