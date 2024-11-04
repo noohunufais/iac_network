@@ -1,0 +1,3 @@
+{%- for route in ipv6_routes %}
+ipv6 route {{ route.destination }} {{ route.next_hop }}
+{%- endfor %}
