@@ -70,3 +70,16 @@ ospf:
     - network: "192.168.300.0"
       wildcard_mask: "0.0.0.255"
       area: "1"
+
+snmp:
+  community:
+    name: "netman"
+    access: "rw"  # Read-write community
+  host:
+    ip_address: "10.0.60.100"
+    version: "2c"
+
+logging:
+  trap: "notifications"
+  host: "10.0.60.100"
+  source_address: "10.0.60.1"
