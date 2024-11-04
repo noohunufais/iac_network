@@ -40,16 +40,11 @@ def tools():
         return render_template('tools.html', devices_list=devices_list)
 
 
-@app.route('/test_form', methods=['GET', 'POST'])
-def test_form():
+@app.route('/config_push', methods=['GET', 'POST'])
+def config_push():
     if request.method == 'POST':
 
-        # Capture Basic Settings data
-        hostname = request.form.get('hostname')
-        username = request.form.get('username')
-        password = request.form.get('password')
-        privilege = request.form.get('privilege')
-        role = request.form.get('role')
+        device_name = request.form['deviceName']
 
         # Capture VLAN data
         vlan_numbers = request.form.getlist('vlan[]')
@@ -138,7 +133,9 @@ def test_form():
         print(f"BGP: {ospfv2_redistribute_bgp}, RIP: {ospfv2_redistribute_rip}, Static: {ospfv2_redistribute_static}, Connected: {ospfv2_redistribute_connected}")
 
         return request.form
-    return render_template('test_form.html')
+    else:
+        devices_list = list(net_apps.load_ipam_file().keys())
+        return render_template('config_push.html', devices_list=devices_list)
 
 
 if __name__ == "__main__":

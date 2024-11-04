@@ -12,7 +12,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href={{ url_for('index') }} >Home</a>
+            <a class="nav-link" href={{ url_for('index') }} >Home</a>
         </li>
       </ul>
     </div>
@@ -24,37 +24,414 @@
 
 {% block content %}
 
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-6"> <!-- Adjust the column size here -->
-      <div class="content">
-        <form action="{{ url_for('add_device') }}" method="post">
-          <div class="mb-3">
-            <label for="host_field" class="form-label">Host Name</label>
-            <input type="text" name="name" class="form-control" id="host_field" placeholder="Router10" aria-describedby="emailHelp">
-            <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
-          </div>
-          <div class="mb-3"></div>
-            <label for="user_field" name="username" class="form-label">Username</label>
-            <input type="text" name="username" class="form-control" id="user_field">
-          </div>
-          <div class="mb-3">
-            <label for="pass_field" name="password" class="form-label">Password</label>
-            <input type="text" name="passowrd" class="form-control" id="pass_field">
-          </div>
-          <div class="mb-3">
-            <label for="interface_field" name="interface_ip" class="form-label">Mgmt Interface IP</label>
-            <input type="text" name="interface" class="form-control" id="interface_field">
-          </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-      </div>
-    </div>
-  </div>
+<div class="container mt-5">
+    <form method="POST" action="{{ url_for('add_device') }}">
+
+
+        <!-- Basic Settings Section -->
+        <button class="btn btn-secondary mb-2" type="button" style="width: 250px;" data-bs-toggle="collapse" data-bs-target="#collapseBasicSettings" aria-expanded="false" aria-controls="collapseBasicSettings">
+            Basic Settings
+        </button>
+        <div class="collapse" id="collapseBasicSettings">
+            <div class="card card-body mt-2">
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">Hostname</label>
+                    <div class="col-md-4">
+                        <input type="text" name="hostname" class="form-control" placeholder="Enter Hostname">
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label class="col-md-2 col-form-label">Username</label>
+                    <div class="col-md-4">
+                        <input type="text" name="username" class="form-control" placeholder="Enter Username">
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label class="col-md-2 col-form-label">Password</label>
+                    <div class="col-md-4">
+                        <input type="password" name="password" class="form-control" placeholder="Enter Password">
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label class="col-md-2 col-form-label">Privilege</label>
+                    <div class="col-md-4">
+                        <input type="text" name="privilege" class="form-control" placeholder="Enter Privilege Level">
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label class="col-md-2 col-form-label">Role</label>
+                    <div class="col-md-4">
+                        <input type="text" name="role" class="form-control" placeholder="Enter Role">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <!-- VLAN Button to Expand the Form -->
+        <button class="btn btn-secondary mb-2" type="button" style="width: 250px;" data-toggle="collapse" data-target="#collapseVLAN" aria-expanded="false" aria-controls="collapseVLAN">
+            VLAN
+        </button>
+        
+        <div class="collapse" id="collapseVLAN">
+            <div class="card card-body mt-2">
+                <div id="vlan-container">
+                    <!-- VLAN entries will be dynamically added here -->
+                </div>
+
+                <!-- Add and Delete buttons for VLAN entries -->
+                <div class="d-flex justify-content-start my-2">
+                    <button type="button" class="btn btn-primary me-2" id="add-vlan">Add</button>
+                    <button type="button" class="btn btn-danger" id="delete-vlan">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <!-- Interfaces Button to Expand the Form -->
+        <button class="btn btn-secondary mb-2" type="button" style="width: 250px;" data-toggle="collapse" data-target="#collapseInterface" aria-expanded="false" aria-controls="collapseInterface">
+            Interface
+        </button>
+
+        <div class="collapse" id="collapseInterface">
+            <div class="card card-body mt-2">
+                <div id="interface-container">
+                    <!-- Interface entries will be dynamically added here -->
+                </div>
+
+                <div class="d-flex justify-content-start my-2">
+                    <button type="button" class="btn btn-primary me-2" id="add-interface">Add</button>
+                    <button type="button" class="btn btn-danger" id="delete-interface">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <!-- IPv4 Static Route Section -->
+        <button class="btn btn-secondary mb-2" type="button" style="width: 250px;" data-bs-toggle="collapse" data-bs-target="#collapseIPv4Route" aria-expanded="false" aria-controls="collapseIPv4Route">
+            IPv4 Static Route
+        </button>
+        <div class="collapse" id="collapseIPv4Route">
+            <div class="card card-body mt-2">
+                <div id="ipv4-route-container"></div>
+                <div class="d-flex justify-content-start my-2">
+                    <button type="button" class="btn btn-primary me-2" id="add-ipv4-route">Add</button>
+                    <button type="button" class="btn btn-danger" id="delete-ipv4-route">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <!-- IPv6 Static Route Section -->
+        <button class="btn btn-secondary mb-2" type="button" style="width: 250px;" data-bs-toggle="collapse" data-bs-target="#collapseIPv6Route" aria-expanded="false" aria-controls="collapseIPv6Route">
+            IPv6 Static Route
+        </button>
+        <div class="collapse" id="collapseIPv6Route">
+            <div class="card card-body mt-2">
+                <div id="ipv6-route-container"></div>
+                <div class="d-flex justify-content-start my-2">
+                    <button type="button" class="btn btn-primary me-2" id="add-ipv6-route">Add</button>
+                    <button type="button" class="btn btn-danger" id="delete-ipv6-route">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+       <!-- Logging Section -->
+        <button class="btn btn-secondary mb-2" type="button" style="width: 250px;" data-bs-toggle="collapse" data-bs-target="#collapseLogging" aria-expanded="false" aria-controls="collapseLogging">
+            Logging
+        </button>
+        <div class="collapse" id="collapseLogging">
+            <div class="card card-body mt-2">
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">Trap Type</label>
+                    <div class="col-md-4">
+                        <select name="log_trap_type" class="form-control">
+                            <option value="" selected>Select Trap Type</option>
+                            <option value="emergencies">Emergencies</option>
+                            <option value="alerts">Alerts</option>
+                            <option value="critical">Critical</option>
+                            <option value="errors">Errors</option>
+                            <option value="warnings">Warnings</option>
+                            <option value="notifications">Notifications</option>
+                            <option value="informational">Informational</option>
+                            <option value="debugging">Debugging</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label class="col-md-2 col-form-label">Host IP</label>
+                    <div class="col-md-4">
+                        <input type="text" name="log_host_ip" class="form-control" placeholder="Enter Host IP">
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label class="col-md-2 col-form-label">Source Address</label>
+                    <div class="col-md-4">
+                        <input type="text" name="log_source_address" class="form-control" placeholder="Enter Source Address">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <!-- SNMP Section -->
+        <button class="btn btn-secondary mb-2" type="button" style="width: 250px;" data-bs-toggle="collapse" data-bs-target="#collapseSNMP" aria-expanded="false" aria-controls="collapseSNMP">
+            SNMP
+        </button>
+        <div class="collapse" id="collapseSNMP">
+            <div class="card card-body mt-2">
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">SNMP Version</label>
+                    <div class="col-md-4">
+                        <select name="snmp_version" class="form-control">
+                            <option value="" selected>Select SNMP Version</option>
+                            <option value="v1">v1</option>
+                            <option value="v2c">v2c</option>
+                            <option value="v3">v3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label class="col-md-2 col-form-label">Community String</label>
+                    <div class="col-md-4">
+                        <input type="text" name="community_string" class="form-control" placeholder="Enter Community String">
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label class="col-md-2 col-form-label">Permission</label>
+                    <div class="col-md-4">
+                        <select name="snmp_permission" class="form-control">
+                            <option value="" selected>Select Permission</option>
+                            <option value="ro">Read-Only</option>
+                            <option value="rw">Read-Write</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label class="col-md-2 col-form-label">Host IP</label>
+                    <div class="col-md-4">
+                        <input type="text" name="snmp_host_ip" class="form-control" placeholder="Enter Host IP">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <!-- OSPFv2 Section -->
+        <button class="btn btn-secondary mb-2" type="button" style="width: 250px;" data-bs-toggle="collapse" data-bs-target="#collapseOSPFv2" aria-expanded="false" aria-controls="collapseOSPFv2">
+            OSPFv2
+        </button>
+        <div class="collapse" id="collapseOSPFv2">
+            <div class="card card-body mt-2">
+                <!-- OSPFv2 Network Inputs -->
+                <h5>OSPFv2 Networks</h5>
+                <div id="ospfv2-container"></div>
+                <div class="d-flex justify-content-start my-2">
+                    <button type="button" class="btn btn-primary me-2" id="add-ospfv2">Add</button>
+                    <button type="button" class="btn btn-danger" id="delete-ospfv2">Delete</button>
+                </div>
+
+                <br>
+
+                <!-- Redistribute Options -->
+                <h5>Redistribute</h5>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="ospfv2_redistribute_bgp" value="1">
+                    <label class="form-check-label">Redistribute BGP</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="ospfv2_redistribute_rip" value="1">
+                    <label class="form-check-label">Redistribute RIP</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="ospfv2_redistribute_static" value="1">
+                    <label class="form-check-label">Redistribute Static</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="ospfv2_redistribute_connected" value="1">
+                    <label class="form-check-label">Redistribute Connected</label>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
 </div>
+
+<!-- JavaScript to handle adding/removing VLAN fields -->
+<script>
+  $(document).ready(function() {
+      let vlanCount = 0; // Counter to keep track of VLAN entries
+      let interfaceCount = 0; // Counter for Interface entries
+      let ipv4RouteCount = 0;
+      let ipv6RouteCount = 0;
+      let ospfv2Count = 0;
+
+      // Function to add a new VLAN entry
+      $('#add-vlan').on('click', function() {
+          vlanCount++;
+          let vlanEntry = `
+              <div class="vlan-entry form-group row" data-vlan-id="${vlanCount}">
+                  <label class="col-md-1 col-form-label">${vlanCount}.</label>
+                  <div class="col-md-4">
+                      <input type="text" name="vlan[]" class="form-control" placeholder="VLAN Number" required>
+                  </div>
+                  <div class="col-md-4">
+                      <input type="text" name="vlan_name[]" class="form-control" placeholder="VLAN Name">
+                  </div>
+              </div>`;
+          $('#vlan-container').append(vlanEntry);
+      });
+
+      // Function to delete the last VLAN entry
+      $('#delete-vlan').on('click', function() {
+          if (vlanCount > 0) {
+              $(`[data-vlan-id="${vlanCount}"]`).remove();
+              vlanCount--;
+          }
+      });
+
+      // Function to add a new Interface entry
+      $('#add-interface').on('click', function() {
+            interfaceCount++;
+            let interfaceEntry = `
+                <div class="interface-entry form-group row" data-interface-id="${interfaceCount}">
+                    <label class="col-md-1 col-form-label">${interfaceCount}.</label>
+                    <div class="interface-entry-data col-md-9 form-group row">
+                        <div class="col-md-3">
+                            <input type="text" name="interface_name[]" class="form-control" placeholder="Interface Name" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="ipv4_address[]" class="form-control" placeholder="IPv4 Address" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="ipv4_subnet[]" class="form-control" placeholder="IPv4 Subnet Mask" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="ipv6_address[]" class="form-control" placeholder="IPv6 Address">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="ipv6_prefix[]" class="form-control" placeholder="IPv6 Prefix">
+                        </div>
+                        <div class="col-md-1 d-flex align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="switchport[]" value="1">
+                                <label class="form-check-label">Switchport</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            $('#interface-container').append(interfaceEntry);
+        });
+
+        // Function to delete the last Interface entry
+        $('#delete-interface').on('click', function() {
+            if (interfaceCount > 0) {
+                $(`[data-interface-id="${interfaceCount}"]`).remove();
+                interfaceCount--;
+            }
+        });
+
+    // Function to add a new IPv4 Static Route entry
+    $('#add-ipv4-route').on('click', function() {
+        ipv4RouteCount++;
+        let ipv4RouteEntry = `
+            <div class="ipv4-route-entry form-group row" data-ipv4-route-id="${ipv4RouteCount}">
+                <label class="col-md-1 col-form-label">${ipv4RouteCount}.</label>
+                <div class="col-md-3">
+                    <input type="text" name="ipv4_dest_network[]" class="form-control" placeholder="Destination Network" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="ipv4_subnet[]" class="form-control" placeholder="Subnet Mask" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="ipv4_next_hop[]" class="form-control" placeholder="Next Hop Address" required>
+                </div>
+            </div>`;
+        $('#ipv4-route-container').append(ipv4RouteEntry);
+    });
+
+    // Function to delete the last IPv4 Static Route entry
+    $('#delete-ipv4-route').on('click', function() {
+        if (ipv4RouteCount > 0) {
+            $(`[data-ipv4-route-id="${ipv4RouteCount}"]`).remove();
+            ipv4RouteCount--;
+        }
+    });
+
+    // Function to add a new IPv6 Static Route entry
+    $('#add-ipv6-route').on('click', function() {
+        ipv6RouteCount++;
+        let ipv6RouteEntry = `
+            <div class="ipv6-route-entry form-group row" data-ipv6-route-id="${ipv6RouteCount}">
+                <label class="col-md-1 col-form-label">${ipv6RouteCount}.</label>
+                <div class="col-md-3">
+                    <input type="text" name="ipv6_dest_network[]" class="form-control" placeholder="Destination Network" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="ipv6_prefix[]" class="form-control" placeholder="Prefix" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="ipv6_next_hop[]" class="form-control" placeholder="Next Hop Address" required>
+                </div>
+            </div>`;
+        $('#ipv6-route-container').append(ipv6RouteEntry);
+    });
+
+    // Function to delete the last IPv6 Static Route entry
+    $('#delete-ipv6-route').on('click', function() {
+        if (ipv6RouteCount > 0) {
+            $(`[data-ipv6-route-id="${ipv6RouteCount}"]`).remove();
+            ipv6RouteCount--;
+        }
+    });
+
+    // Function to add a new OSPFv2 Network entry
+    $('#add-ospfv2').on('click', function() {
+        ospfv2Count++;
+        let ospfv2Entry = `
+            <div class="ospfv2-entry form-group row" data-ospfv2-id="${ospfv2Count}">
+                <label class="col-md-1 col-form-label">${ospfv2Count}.</label>
+                <div class="col-md-3">
+                    <input type="text" name="ospfv2_network[]" class="form-control" placeholder="Network" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="ospfv2_subnet_mask[]" class="form-control" placeholder="Subnet Mask" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="ospfv2_area[]" class="form-control" placeholder="Area Number" required>
+                </div>
+            </div>`;
+        $('#ospfv2-container').append(ospfv2Entry);
+    });
+
+    // Function to delete the last OSPFv2 Network entry
+    $('#delete-ospfv2').on('click', function() {
+        if (ospfv2Count > 0) {
+            $(`[data-ospfv2-id="${ospfv2Count}"]`).remove();
+            ospfv2Count--;
+        }
+    });
+
+  });
+</script>
 
 
 {% endblock %}
+
+
+
+
 
 
 
