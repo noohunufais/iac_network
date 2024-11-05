@@ -70,6 +70,11 @@ ospf:
     - network: "192.168.300.0"
       wildcard_mask: "0.0.0.255"
       area: "1"
+  redistribute:
+    bgp: true
+    rip: false
+    static: true
+    connected: true
 
 snmp:
   community:

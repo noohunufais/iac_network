@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
 import getconfig
 import net_apps
+from config_device import configure_device
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -64,9 +66,9 @@ def config_push():
         ipv4_next_hops = request.form.getlist('ipv4_next_hop[]')
 
         # Capture IPv6 Static Route data
-        # ipv6_dest_networks = request.form.getlist('ipv6_dest_network[]')
-        # ipv6_prefixes = request.form.getlist('ipv6_prefix[]')
-        # ipv6_next_hops = request.form.getlist('ipv6_next_hop[]')
+        ipv6_dest_networks = request.form.getlist('ipv6_dest_network[]')
+        ipv6_prefixes = request.form.getlist('ipv6_prefix[]')
+        ipv6_next_hops = request.form.getlist('ipv6_next_hop[]')
 
         # Capture Logging data
         # log_trap_type = request.form.get('log_trap_type')
@@ -79,16 +81,21 @@ def config_push():
         # snmp_permission = request.form.get('snmp_permission')
         # snmp_host_ip = request.form.get('snmp_host_ip')
 
-        # Capture OSPFv2 Network data
-        # ospfv2_networks = request.form.getlist('ospfv2_network[]')
-        # ospfv2_subnet_masks = request.form.getlist('ospfv2_subnet_mask[]')
-        # ospfv2_areas = request.form.getlist('ospfv2_area[]')
 
-        # Capture Redistribute data
-        # ospfv2_redistribute_bgp = request.form.get('ospfv2_redistribute_bgp')
-        # ospfv2_redistribute_rip = request.form.get('ospfv2_redistribute_rip')
-        # ospfv2_redistribute_static = request.form.get('ospfv2_redistribute_static')
-        # ospfv2_redistribute_connected = request.form.get('ospfv2_redistribute_connected')
+        # Capture OSPFv2 Process ID and Router ID
+        ospfv2_process_id = request.form.get('ospfv2_process_id')
+        ospfv2_router_id = request.form.get('ospfv2_router_id')
+
+        # Capture OSPFv2 Network data
+        ospfv2_networks = request.form.getlist('ospfv2_network[]')
+        ospfv2_subnet_masks = request.form.getlist('ospfv2_subnet_mask[]')
+        ospfv2_areas = request.form.getlist('ospfv2_area[]')
+
+        # Capture Redistribute data (None if unchecked)
+        ospfv2_redistribute_bgp = request.form.get('ospfv2_redistribute_bgp')
+        ospfv2_redistribute_rip = request.form.get('ospfv2_redistribute_rip')
+        ospfv2_redistribute_static = request.form.get('ospfv2_redistribute_static')
+        ospfv2_redistribute_connected = request.form.get('ospfv2_redistribute_connected')
 
         # Debugging: Print the captured data to the console (for testing purposes)
         # print("VLAN Data:")
@@ -99,9 +106,9 @@ def config_push():
         # for i, (iface_name, ipv4, subnet, ipv6, prefix, switchport) in enumerate(zip(interface_names, ipv4_addresses, ipv4_subnets, ipv6_addresses, ipv6_prefixes, switchports), start=1):
         #     print(f"Interface {i}: Name={iface_name}, IPv4={ipv4}, Subnet={subnet}, IPv6={ipv6}, Prefix={prefix}, Switchport={switchport}")
 
-        print("\nIPv4 Static Route Data:")
-        for i, (dest, subnet, next_hop) in enumerate(zip(ipv4_dest_networks, ipv4_subnets, ipv4_next_hops), start=1):
-            print(f"Route {i}: Destination Network={dest}, Subnet Mask={subnet}, Next Hop={next_hop}")
+        # print("\nIPv4 Static Route Data:")
+        # for i, (dest, subnet, next_hop) in enumerate(zip(ipv4_dest_networks, ipv4_subnets, ipv4_next_hops), start=1):
+        #     print(f"Route {i}: Destination Network={dest}, Subnet Mask={subnet}, Next Hop={next_hop}")
 
         # print("\nIPv6 Static Route Data:")
         # for i, (dest, prefix, next_hop) in enumerate(zip(ipv6_dest_networks, ipv6_prefixes, ipv6_next_hops), start=1):
@@ -132,7 +139,25 @@ def config_push():
         # print("\nRedistribute Options:")
         # print(f"BGP: {ospfv2_redistribute_bgp}, RIP: {ospfv2_redistribute_rip}, Static: {ospfv2_redistribute_static}, Connected: {ospfv2_redistribute_connected}")
 
-        return request.form
+        # Prepare configuration data from form input
+        config_data = {
+            'ipv4_routes': [
+                {'destination': dest, 'subnet_mask': subnet, 'next_hop': next_hop}
+                for dest, subnet, next_hop in zip(ipv4_dest_networks, ipv4_subnets, ipv4_next_hops)
+            ],
+            'ipv6_routes': [
+                {'destination': dest, 'prefix': prefix, 'next_hop': next_hop}
+                for dest, prefix, next_hop in zip(ipv6_dest_networks, ipv6_prefixes, ipv6_next_hops)
+            ]
+        }
+        print(config_data)
+
+        # Call configure_device to push the configuration
+        try:
+            output = configure_device(device_name, config_data)
+            return f'<pre> {output} </pre>'
+        except Exception as e:
+            return 'FAILURE'
     else:
         devices_list = list(net_apps.load_ipam_file().keys())
         return render_template('config_push.html', devices_list=devices_list)

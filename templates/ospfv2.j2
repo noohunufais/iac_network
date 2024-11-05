@@ -1,9 +1,23 @@
 {%- if ospf.process_id %}
 router ospf {{ ospf.process_id }}
-{%- if ospf.router_id %}
+   {%- if ospf.router_id %}
    router-id {{ ospf.router_id }}
-{%- endif %}
-{%- for network in ospf.networks %}
+   {%- endif %}
+
+   {%- for network in ospf.networks %}
    network {{ network.network }} {{ network.wildcard_mask }} area {{ network.area }}
-{%- endfor %}
+   {%- endfor %}
+
+   {%- if ospf.redistribute.bgp %}
+   redistribute bgp
+   {%- endif %}
+   {%- if ospf.redistribute.rip %}
+   redistribute rip
+   {%- endif %}
+   {%- if ospf.redistribute.static %}
+   redistribute static
+   {%- endif %}
+   {%- if ospf.redistribute.connected %}
+   redistribute connected
+   {%- endif %}
 {%- endif %}

@@ -119,6 +119,28 @@
         </button>
         <div class="collapse" id="collapseOSPFv2">
             <div class="card card-body mt-2">
+                <!-- OSPFv2 Network Inputs
+                <h5>OSPFv2 Networks</h5>
+                <div id="ospfv2-container"></div>
+                <div class="d-flex justify-content-start my-2">
+                    <button type="button" class="btn btn-primary me-2" id="add-ospfv2">Add</button>
+                    <button type="button" class="btn btn-danger" id="delete-ospfv2">Delete</button>
+                </div> -->
+
+                <h5>OSPFv2 Configuration</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="ospfv2-process-id" class="form-label">Process ID</label>
+                        <input type="text" class="form-control" id="ospfv2-process-id" name="ospfv2_process_id" placeholder="Enter Process ID">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="ospfv2-router-id" class="form-label">Router ID</label>
+                        <input type="text" class="form-control" id="ospfv2-router-id" name="ospfv2_router_id" placeholder="Enter Router ID (e.g., 1.1.1.1)">
+                    </div>
+                </div>
+
+                <br>
+
                 <!-- OSPFv2 Network Inputs -->
                 <h5>OSPFv2 Networks</h5>
                 <div id="ospfv2-container"></div>
