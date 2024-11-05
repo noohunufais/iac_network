@@ -5,7 +5,7 @@ from netmiko import ConnectHandler
 import os
 
 # Step 1: Load the JSON file
-def load_ipam_file(file_path='ipam.json'):
+def load_ipam_file(file_path='/home/student/iac_network/flask/ipam.json'):
     with open(file_path, 'r') as file:
         ipam_data = json.load(file)
     return ipam_data
