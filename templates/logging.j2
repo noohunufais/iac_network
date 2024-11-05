@@ -1,3 +1,11 @@
+{%- if logging.trap %}
 logging trap {{ logging.trap }}
+{%- endif %}
+
+{%- if logging.host %}
 logging host {{ logging.host }}
+{%- endif %}
+
+{%- if logging.source_address %}
 logging source-address {{ logging.source_address }}
+{%- endif %}

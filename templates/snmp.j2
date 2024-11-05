@@ -1,2 +1,6 @@
+{%- if snmp.community.name and snmp.community.access %}
 snmp-server community {{ snmp.community.name }} {{ snmp.community.access }}
+{%- endif %}
+{%- if snmp.host.ip_address and snmp.host.version and snmp.community.name %}
 snmp-server host {{ snmp.host.ip_address }} version {{ snmp.host.version }} {{ snmp.community.name }}
+{%- endif %}

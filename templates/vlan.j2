@@ -1,6 +1,8 @@
 {%- for vlan in vlans %}
+{%- if vlan.vlan_id %}
 vlan {{ vlan.vlan_id }}
 {%- if vlan.name %}
    name {{ vlan.name }}
+{%- endif %}
 {%- endif %}
 {%- endfor %}

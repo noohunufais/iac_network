@@ -1,0 +1,27 @@
+{%- if snmp is defined %}
+{%- include 'snmp.j2' %}
+{%- endif %}
+!
+{%- if logging is defined %}
+{%- include 'logging.j2' %}
+{%- endif %}
+!
+{%- if ipv4_routes is defined %}
+{%- include 'ipv4_static_route.j2' %}
+{%- endif %}
+!
+{%- if ipv6_routes is defined %}
+{%- include 'ipv6_static_route.j2' %}
+{%- endif %}
+!
+{%- if ospf is defined %}
+{%- include 'ospfv2.j2' %}
+{%- endif %}
+!
+{%- if interfaces is defined %}
+{%- include 'interface.j2' %}
+{%- endif %}
+!
+{%- if vlans is defined %}
+{%- include 'vlan.j2' %}
+{%- endif %}
