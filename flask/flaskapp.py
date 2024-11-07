@@ -49,16 +49,18 @@ def config_push():
         device_name = request.form['deviceName']
 
         # Capture VLAN data
-        # vlan_numbers = request.form.getlist('vlan[]')
-        # vlan_names = request.form.getlist('vlan_name[]')
+        vlan_numbers = request.form.getlist('vlan[]')
+        vlan_names = request.form.getlist('vlan_name[]')
 
         # Capture Interface data
-        # interface_names = request.form.getlist('interface_name[]') 
-        # ipv4_addresses = request.form.getlist('ipv4_address[]') 
-        # ipv4_subnets = request.form.getlist('ipv4_subnet[]') 
-        # ipv6_addresses = request.form.getlist('ipv6_address[]') 
-        # ipv6_prefixes = request.form.getlist('ipv6_prefix[]')  
-        # switchports = request.form.getlist('switchport[]')
+        interface_names = request.form.getlist('interface_name[]')
+        interface_descriptions = request.form.getlist('interface_description[]') 
+        ipv4_addresses = request.form.getlist('ipv4_address[]')
+        ipv4_subnets = request.form.getlist('ipv4_subnet[]')
+        ipv6_addresses = request.form.getlist('ipv6_address[]')
+        ipv6_prefixes = request.form.getlist('ipv6_prefix[]')
+        switchports = request.form.getlist('switchport[]')
+        interface_statuses = request.form.getlist('interface_status[]')
 
         # Capture IPv4 Static Route data
         ipv4_dest_networks = request.form.getlist('ipv4_dest_network[]')
@@ -102,9 +104,9 @@ def config_push():
         # for i, (vlan_num, vlan_name) in enumerate(zip(vlan_numbers, vlan_names), start=1):
         #     print(f"VLAN {i}: Number={vlan_num}, Name={vlan_name}")
 
-        # print("\nInterface Data:")
-        # for i, (iface_name, ipv4, subnet, ipv6, prefix, switchport) in enumerate(zip(interface_names, ipv4_addresses, ipv4_subnets, ipv6_addresses, ipv6_prefixes, switchports), start=1):
-        #     print(f"Interface {i}: Name={iface_name}, IPv4={ipv4}, Subnet={subnet}, IPv6={ipv6}, Prefix={prefix}, Switchport={switchport}")
+        print("\nInterface Data:")
+        for i, (iface_name, ipv4, subnet, ipv6, prefix, switchport) in enumerate(zip(interface_names, ipv4_addresses, ipv4_subnets, ipv6_addresses, ipv6_prefixes, switchports), start=1):
+            print(f"Interface {i}: Name={iface_name}, IPv4={ipv4}, Subnet={subnet}, IPv6={ipv6}, Prefix={prefix}, Switchport={switchport}")
 
         # print("\nIPv4 Static Route Data:")
         # for i, (dest, subnet, next_hop) in enumerate(zip(ipv4_dest_networks, ipv4_subnets, ipv4_next_hops), start=1):
@@ -148,11 +150,46 @@ def config_push():
             'ipv6_routes': [
                 {'destination': dest, 'prefix': prefix, 'next_hop': next_hop}
                 for dest, prefix, next_hop in zip(ipv6_dest_networks, ipv6_prefixes, ipv6_next_hops)
+            ],
+            'ospf': {
+                'process_id': ospfv2_process_id,
+                'router_id': ospfv2_router_id if ospfv2_router_id else None,
+                'networks': [
+                    {'network': network, 'wildcard_mask': wildcard_mask, 'area': area}
+                    for network, wildcard_mask, area in zip(ospfv2_networks, ospfv2_subnet_masks, ospfv2_areas)
+                ],
+                'redistribute': {
+                    'bgp': ospfv2_redistribute_bgp == '1',
+                    'rip': ospfv2_redistribute_rip == '1',
+                    'static': ospfv2_redistribute_static == '1',
+                    'connected': ospfv2_redistribute_connected == '1'
+                }
+            },
+            'vlans': [
+                {'vlan_id': vlan, 'name': name}
+                for vlan, name in zip(vlan_numbers, vlan_names)
+            ],
+            'interfaces': [
+                {
+                    'name': name,
+                    'description': description,  
+                    'ip_address': ip,
+                    'subnet_mask': subnet,
+                    'ipv6_address': ipv6,
+                    'ipv6_prefix_length': ipv6_prefix,
+                    'status': status,
+                    'switchport': switchport == '1'
+
+                }
+                for name, description, ip, subnet, ipv6, ipv6_prefix, switchport, status in zip(
+                    interface_names, interface_descriptions, ipv4_addresses, ipv4_subnets, ipv6_addresses, ipv6_prefixes, switchports, interface_statuses
+                )
             ]
         }
+
         print(config_data)
 
-        # Call configure_device to push the configuration
+
         try:
             output = configure_device(device_name, config_data)
             return f'<pre> {output} </pre>'

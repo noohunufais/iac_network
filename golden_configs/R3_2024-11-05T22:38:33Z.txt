@@ -1,16 +1,12 @@
 ! Command: show running-config
-! device: R4 (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
+! device: R3 (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
 !
 no aaa root
 !
-username admin privilege 15 role network-admin secret netman
+username admin privilege 15 role network-admin secret sha512 $6$IWP6l5kpUkMKCVO3$uSFAWn5bpUKhTBeh1gt4T/g6iJioKvEpbyRxUzbUrrDpcoR9gZrk33EumaiLM48W.NWfc88/p0oe4L3vUOPmZ1
 !
 management api http-commands
    no shutdown
-!
-ip dhcp relay information option
-ip dhcp relay always-on
-ip dhcp relay all-subnets default
 !
 no service interface inactive port-id allocation disabled
 !
@@ -20,9 +16,9 @@ service routing protocols model multi-agent
 !
 logging trap notifications
 logging host 10.0.60.100
-logging source-address 10.0.60.4
+logging source-address 10.0.60.3
 !
-hostname R4
+hostname R3
 !
 snmp-server community netman rw
 snmp-server host 10.0.60.100 version 2c netman
@@ -41,35 +37,33 @@ management api netconf
 !
 interface Ethernet1
    no switchport
-   ip address 10.0.70.4/24
+   no snmp trap link-change
+   ip address 10.0.70.3/24
    ipv6 enable
-   ipv6 address 2070::4/64
+   ipv6 address 2070::3/64
    ipv6 ospf 1 area 0.0.0.0
 !
 interface Ethernet2
    no switchport
-   ip address 10.0.60.4/24
+   ip address 10.0.60.3/24
    ipv6 enable
-   ipv6 address 2060::4/64
+   ipv6 address 2060::3/64
    ipv6 ospf 1 area 0.0.0.0
 !
 interface Ethernet3
    no switchport
-   ip address 10.0.90.4/24
+   ip address 10.0.80.3/24
    ipv6 enable
-   ipv6 address 2090::4/64
+   ipv6 address 2080::3/64
    ipv6 ospf 1 area 0.0.0.0
 !
 interface Ethernet4
-   no switchport
-   ip address 10.0.40.4/24
-   ip helper-address 10.0.60.2
-   ipv6 enable
-   ipv6 address 2040::4/64
+!
+interface Ethernet12
 !
 interface Management0
-   ip address 172.20.20.14/24
-   ipv6 address 2001:172:20:20::14/80
+   ip address 172.20.20.13/24
+   ipv6 address 2001:172:20:20::13/80
 !
 ip routing
 !
@@ -79,16 +73,16 @@ ip route 0.0.0.0/0 172.20.20.1
 !
 ipv6 route ::/0 2001:172:20:20::1
 !
-router bgp 3
-   neighbor 10.0.90.5 remote-as 2
-   neighbor 2090::5 remote-as 2
+router bgp 1
+   neighbor 10.0.80.5 remote-as 2
+   neighbor 2080::5 remote-as 2
    !
    address-family ipv4
-      neighbor 10.0.90.5 activate
+      neighbor 10.0.80.5 activate
       redistribute ospf
    !
    address-family ipv6
-      neighbor 2090::5 activate
+      neighbor 2080::5 activate
       redistribute ospfv3
 !
 router multicast

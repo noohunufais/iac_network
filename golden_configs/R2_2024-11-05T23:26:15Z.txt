@@ -3,7 +3,7 @@
 !
 no aaa root
 !
-username admin privilege 15 role network-admin secret netman
+username admin privilege 15 role network-admin secret sha512 $6$hvtZqf1FNC1HiafM$igJO8jTdy8KGLSwa9tK5bsDjusQ/YFYy6m0Bh4pN7kf5nXCWqXoBZV9pTkEHMbr.vjL4jnFij4vG/Cjfdsoyd.
 !
 management api http-commands
    no shutdown
@@ -18,16 +18,6 @@ dhcp server
       range 10.0.20.4 10.0.20.254
       name VLAN_20
       default-gateway 10.0.20.3
-   !
-   subnet 10.0.40.0/24
-      reservations
-         mac-address 6666.6666.6666
-            ipv4-address 10.0.40.6
-   !
-   subnet 10.0.50.0/24
-      reservations
-         mac-address 7777.7777.7777
-            ipv4-address 10.0.50.7
    !
    subnet 2010::/64
       range 2010::4 2010::11
@@ -78,7 +68,6 @@ interface Ethernet2
 interface Ethernet3
    no switchport
    ip address 10.0.60.2/24
-   dhcp server ipv4
    ipv6 enable
    ipv6 address 2060::2/24
    ipv6 ospf 1 area 0.0.0.0

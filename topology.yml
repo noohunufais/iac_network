@@ -37,6 +37,18 @@ topology:
       mgmt-ipv4: 172.20.20.15
       mgmt-ipv6: 2001:172:20:20::15
       startup-config: /home/student/iac_network/configs/R5.cfg
+    R6:
+      kind: ceos
+      image: ceos:4.32.2F
+      mgmt-ipv4: 172.20.20.26
+      mgmt-ipv6: 2001:172:20:20::26
+      startup-config: /home/student/iac_network/configs/R6.cfg
+    R7:
+      kind: ceos
+      image: ceos:4.32.2F
+      mgmt-ipv4: 172.20.20.27
+      mgmt-ipv6: 2001:172:20:20::27
+      startup-config: /home/student/iac_network/configs/R7.cfg
     S1:
       kind: ceos
       image: ceos:4.32.2F
@@ -128,3 +140,5 @@ topology:
     - endpoints: ["H3:eth1", "S2:eth3"]
     - endpoints: ["H4:eth1", "S2:eth4"]
     - endpoints: ["S3:eth4", "host:S3_eth4"]
+    - endpoints: ["R4:eth4", "R6:eth1"]
+    - endpoints: ["R6:eth2", "R7:eth1"]

@@ -212,32 +212,44 @@
       });
 
       // Function to add a new Interface entry
+      // Function to add a new Interface entry
       $('#add-interface').on('click', function() {
             interfaceCount++;
             let interfaceEntry = `
-                <div class="interface-entry form-group row" data-interface-id="${interfaceCount}">
+                <div class="interface-entry form-group border rounded p-3 mb-2" data-interface-id="${interfaceCount}">
                     <label class="col-md-1 col-form-label">${interfaceCount}.</label>
-                    <div class="interface-entry-data col-md-9 form-group row">
+                    <div class="interface-entry-data row">
                         <div class="col-md-3">
                             <input type="text" name="interface_name[]" class="form-control" placeholder="Interface Name" required>
                         </div>
-                        <div class="col-md-2">
-                            <input type="text" name="ipv4_address[]" class="form-control" placeholder="IPv4 Address" required>
+                        <div class="col-md-4">
+                            <input type="text" name="interface_description[]" class="form-control" placeholder="Description" />
                         </div>
                         <div class="col-md-2">
-                            <input type="text" name="ipv4_subnet[]" class="form-control" placeholder="IPv4 Subnet Mask" required>
+                            <select name="interface_status[]" class="form-control" >
+                                <option value="">Select Status</option>
+                                <option value="up">Up</option>
+                                <option value="down">Down</option>
+                            </select>
                         </div>
                         <div class="col-md-2">
+                            <select name="switchport[]" class="form-control" >
+                                <option value="">Switchport?</option>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" name="ipv4_address[]" class="form-control" placeholder="IPv4 Address" >
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" name="ipv4_subnet[]" class="form-control" placeholder="IPv4 Subnet Mask" >
+                        </div>
+                        <div class="col-md-3">
                             <input type="text" name="ipv6_address[]" class="form-control" placeholder="IPv6 Address">
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <input type="text" name="ipv6_prefix[]" class="form-control" placeholder="IPv6 Prefix">
-                        </div>
-                        <div class="col-md-1 d-flex align-items-center">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="switchport[]" value="1">
-                                <label class="form-check-label">Switchport</label>
-                            </div>
                         </div>
                     </div>
                 </div>`;
@@ -251,33 +263,6 @@
                 interfaceCount--;
             }
         });
-
-    // Function to add a new IPv4 Static Route entry
-    $('#add-ipv4-route').on('click', function() {
-        ipv4RouteCount++;
-        let ipv4RouteEntry = `
-            <div class="ipv4-route-entry form-group row" data-ipv4-route-id="${ipv4RouteCount}">
-                <label class="col-md-1 col-form-label">${ipv4RouteCount}.</label>
-                <div class="col-md-3">
-                    <input type="text" name="ipv4_dest_network[]" class="form-control" placeholder="Destination Network" required>
-                </div>
-                <div class="col-md-3">
-                    <input type="text" name="ipv4_subnet[]" class="form-control" placeholder="Subnet Mask" required>
-                </div>
-                <div class="col-md-3">
-                    <input type="text" name="ipv4_next_hop[]" class="form-control" placeholder="Next Hop Address" required>
-                </div>
-            </div>`;
-        $('#ipv4-route-container').append(ipv4RouteEntry);
-    });
-
-    // Function to delete the last IPv4 Static Route entry
-    $('#delete-ipv4-route').on('click', function() {
-        if (ipv4RouteCount > 0) {
-            $(`[data-ipv4-route-id="${ipv4RouteCount}"]`).remove();
-            ipv4RouteCount--;
-        }
-    });
 
     // Function to add a new IPv6 Static Route entry
     $('#add-ipv6-route').on('click', function() {
