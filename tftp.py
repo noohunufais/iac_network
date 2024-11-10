@@ -42,6 +42,20 @@ def main():
             "username": "admin",
             "password": "netman",
             "config_file": "tftp/R7.cfg"
+        },
+        "R8": {
+            "device_type": "arista_eos",
+            "host": "10.0.110.8",
+            "username": "admin",
+            "password": "netman",
+            "config_file": "tftp/R8.cfg"
+        },
+        "S5": {
+            "device_type": "arista_eos",
+            "host": "10.0.120.15",
+            "username": "admin",
+            "password": "netman",
+            "config_file": "tftp/S5.cfg"
         }
     }
 
