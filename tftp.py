@@ -129,7 +129,6 @@ def main():
         thread.join()
 
     try:
-        # Define the directory to execute commands in
         work_dir = "/home/student/iac_network/"
 
         # 1. Pull latest code
@@ -181,8 +180,6 @@ def main():
     except Exception as e:
         print(f"An error occurred during Git or coverage operations: {e}")
 
-
-    
 
 if __name__ == "__main__":
     main()
