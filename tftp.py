@@ -60,9 +60,14 @@ def run_docker_command(device_name):
         telegraf_command = f'sudo docker exec -d -it clab-netman-{device_name} telegraf --config /home/admin/telegraf.conf'
         child = pexpect.spawn(telegraf_command, encoding='utf-8')
 
-        # Handle the password prompt for the telegraf command
-        child.expect("password", timeout=10)
-        child.sendline(password)
+        # Check if the telegraf command requests a password
+        i = child.expect([pexpect.TIMEOUT, "password"], timeout=10)
+        if i == 1:
+            # Send password if prompted
+            child.sendline(password)
+
+        # Wait for the command to go into the background and return control
+        child.expect(pexpect.EOF)
 
         # Since it's in detached mode, we don't wait for the command to finish
         print(f"Telegraf started in detached mode on {device_name} and will run continuously.")
