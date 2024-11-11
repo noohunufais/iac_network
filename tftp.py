@@ -36,24 +36,36 @@ def run_docker_command(device_name):
     try:
         # Read the password from password.txt
         with open("password.txt", "r") as file:
-            password = file.read().strip()
+            password = file.read().strip()  # Remove any extra whitespace or newline characters
         
-        # Start the Docker SCP command
+        # Start the Docker SCP command to copy the file
         child = pexpect.spawn(f'sudo docker exec -it clab-netman-{device_name} scp student@10.0.60.100:/home/student/telegraf.conf /home/admin/', encoding='utf-8')
         
-        # Handle the first password prompt
+        # Handle the first password prompt for SCP
         child.expect("password", timeout=10)
         child.sendline(password)
 
-        # Handle the second password prompt
+        # Handle the second password prompt for SCP
         child.expect("password", timeout=10)
         child.sendline(password)
 
-        # Wait for command to complete
+        # Wait for SCP command to complete
         child.expect(pexpect.EOF)
+
+        # Print the output of the SCP command
+        print(f"SCP command output for {device_name}:")
+        print(child.before)  # This captures and prints the output of the SCP command
         
-        # If we reach EOF without errors, print a success message
-        print(f"Successfully copied the telegraf.conf file to {device_name}.")
+        # Run the telegraf command with an expected password prompt
+        telegraf_command = f'sudo docker exec -d -it clab-netman-{device_name} telegraf --config /home/admin/telegraf.conf'
+        child = pexpect.spawn(telegraf_command, encoding='utf-8')
+
+        # Handle the password prompt for the telegraf command
+        child.expect("password", timeout=10)
+        child.sendline(password)
+
+        # Since it's in detached mode, we don't wait for the command to finish
+        print(f"Telegraf started in detached mode on {device_name} and will run continuously.")
 
     except pexpect.TIMEOUT:
         print(f"Command for {device_name} timed out. Unable to complete within the expected time.")
