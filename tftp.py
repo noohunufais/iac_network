@@ -3,6 +3,7 @@ from threading import Thread
 from netmiko import ConnectHandler
 from time import sleep
 from flask.connectivity import ping_check
+import subprocess
 
 def config_push(device_name, device_info):
     ip_address = device_info["host"]
@@ -126,6 +127,62 @@ def main():
 
     for thread in threads:
         thread.join()
+
+    try:
+        # Define the directory to execute commands in
+        work_dir = "/home/student/iac_network/"
+
+        # 1. Pull latest code
+        result = subprocess.run(['git', 'pull', 'origin', 'main'], cwd=work_dir, capture_output=True, text=True)
+        print("Git pull output:")
+        print(result.stdout)
+        if result.returncode != 0:
+            print(f"Error in git pull: {result.stderr}")
+
+        # 2. Stage changes for commit
+        result = subprocess.run(['git', 'add', '.'], cwd=work_dir, capture_output=True, text=True)
+        print("Git add output:")
+        print(result.stdout)
+        if result.returncode != 0:
+            print(f"Error in git add: {result.stderr}")
+
+        # 3. Commit changes with a message
+        result = subprocess.run(['git', 'commit', '-m', 'deployed'], cwd=work_dir, capture_output=True, text=True)
+        print("Git commit output:")
+        print(result.stdout)
+        if result.returncode != 0:
+            print(f"Error in git commit: {result.stderr}")
+
+        # 4. Push changes to the repository
+        result = subprocess.run(['git', 'push', 'origin', 'main'], cwd=work_dir, capture_output=True, text=True)
+        print("Git push output:")
+        print(result.stdout)
+        if result.returncode != 0:
+            print(f"Error in git push: {result.stderr}")
+
+        # 5. Run test coverage
+        result = subprocess.run(['coverage', 'run', '-m', 'unittest', 'discover', 'tests'], cwd=work_dir, capture_output=True, text=True)
+        print("Test coverage output:")
+        print(result.stdout)
+        if result.returncode != 0:
+            print(f"Error in coverage run: {result.stderr}")
+
+        # 6. Generate HTML coverage report
+        result = subprocess.run(['coverage', 'html'], cwd=work_dir, capture_output=True, text=True)
+        print("HTML coverage report output:")
+        print(result.stdout)
+        if result.returncode != 0:
+            print(f"Error in coverage html: {result.stderr}")
+
+        print("All Git and coverage operations completed successfully.")
+
+    except FileNotFoundError as e:
+        print(f"Command not found or could not be executed: {e}")
+    except Exception as e:
+        print(f"An error occurred during Git or coverage operations: {e}")
+
+
+    
 
 if __name__ == "__main__":
     main()
