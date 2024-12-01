@@ -26,12 +26,9 @@ def golden_config():
 @app.route('/alerts', methods=['POST'])
 def receive_alert():
     try:
-        # Parse the incoming JSON payload
         alert_data = request.json
         print(f"Received alert: {alert_data}")
         
-        # Process the alert (e.g., save to file, trigger an action, etc.)
-        # For now, just log and return a response
         return jsonify({"status": "success", "message": "Alert received"}), 200
 
     except Exception as e:
