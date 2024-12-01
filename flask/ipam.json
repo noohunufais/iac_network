@@ -133,6 +133,38 @@
             }
         }
     },
+    "R6": {
+        "username": "admin",
+        "password": "netman",
+        "interfaces": {
+            "Management0": {
+                "ipv4": "172.20.20.26/24",
+                "ipv6": "2001:172:20:20::15/80"
+            },
+            "Ethernet1": {
+                "ipv4": "10.0.40.6/24",
+                "ipv6": ""
+            },
+            "Ethernet2": {
+                "ipv4": "10.0.50.6/24",
+                "ipv6": ""
+            }
+        }
+    },
+    "R7": {
+        "username": "admin",
+        "password": "netman",
+        "interfaces": {
+            "Management0": {
+                "ipv4": "172.20.20.27/24",
+                "ipv6": "2001:172:20:20::15/80"
+            },
+            "Ethernet1": {
+                "ipv4": "10.0.50.7/24",
+                "ipv6": ""
+            }
+        }
+    },
     "S1": {
         "username": "admin",
         "password": "netman",

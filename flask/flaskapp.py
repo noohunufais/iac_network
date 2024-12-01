@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import getconfig
 import net_apps
 from config_device import configure_device
+import tshoot_interface
 
 app = Flask(__name__)
 
@@ -26,10 +27,19 @@ def golden_config():
 @app.route('/alerts', methods=['POST'])
 def receive_alert():
     try:
+        # Parse the incoming JSON payload
         alert_data = request.json
-        print(f"Received alert: {alert_data}")
         
-        return jsonify({"status": "success", "message": "Alert received"}), 200
+        # Extract the IP address (instance label)
+        if 'alerts' in alert_data and len(alert_data['alerts']) > 0:
+            instance_ip = alert_data['alerts'][0]['labels'].get('instance', 'No IP found')
+            tshoot_interface.tshoot(instance_ip)
+            
+        else:
+            instance_ip = 'No IP found'
+        
+        # Log the extracted IP or take additional actions
+        return jsonify({"status": "success", "instance_ip": instance_ip}), 200
 
     except Exception as e:
         print(f"Error processing alert: {e}")
