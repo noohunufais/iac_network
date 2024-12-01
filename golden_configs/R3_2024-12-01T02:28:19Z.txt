@@ -1,9 +1,9 @@
 ! Command: show running-config
-! device: R1 (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
+! device: R3 (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
 !
 no aaa root
 !
-username admin privilege 15 role network-admin secret sha512 $6$8tzbLXv/TZdVGOAu$l3/w3YO6cRoVJFzEHc3TRfD35/9Qis7bBmVZcX9hoxNMtN8dj0l1LfvfsyKlKSNaAZPCfPqAaszVguu8x0Sm41
+username admin privilege 15 role network-admin secret sha512 $6$.IYh6hXgE3qakOfo$JLdszbOo.6FPGvR0KNZKZRM9SGuPEhvdlKHLVs0ql80BtrmSlsT3nyieta1PClSLDRB4ESRysfEuZZVvwN7Bu0
 !
 management api http-commands
    no shutdown
@@ -16,9 +16,9 @@ service routing protocols model multi-agent
 !
 logging trap notifications
 logging host 10.0.60.100
-logging source-address 10.0.60.1
+logging source-address 10.0.60.3
 !
-hostname R1
+hostname R3
 !
 snmp-server community netman rw
 snmp-server host 10.0.60.100 version 2c netman
@@ -29,8 +29,6 @@ system l1
    unsupported speed action error
    unsupported error-correction action error
 !
-vlan 10,20,30
-!
 management api gnmi
    transport grpc default
 !
@@ -38,44 +36,34 @@ management api netconf
    transport ssh default
 !
 interface Ethernet1
+   no switchport
+   no snmp trap link-change
+   ip address 10.0.70.3/24
+   ipv6 enable
+   ipv6 address 2070::3/64
+   ipv6 ospf 1 area 0.0.0.0
 !
 interface Ethernet2
-   switchport mode trunk
+   no switchport
+   ip address 10.0.60.3/24
+   ipv6 enable
+   ipv6 address 2060::3/64
+   ipv6 ospf 1 area 0.0.0.0
 !
 interface Ethernet3
    no switchport
-   ip address 10.0.60.1/24
+   ip address 10.0.80.3/24
    ipv6 enable
-   ipv6 address 2060::1/64
+   ipv6 address 2080::3/64
    ipv6 ospf 1 area 0.0.0.0
+!
+interface Ethernet4
+!
+interface Ethernet12
 !
 interface Management0
-   ip address 172.20.20.11/24
-   ipv6 address 2001:172:20:20::11/80
-!
-interface Vlan10
-   ip address 10.0.10.1/24
-   ipv6 enable
-   ipv6 address 2010::1/64
-   ipv6 ospf 1 area 0.0.0.0
-   ip virtual-router address 10.0.10.3
-   ipv6 virtual-router address 2010::3
-!
-interface Vlan20
-   ip address 10.0.20.1/24
-   ipv6 enable
-   ipv6 address 2020::1/64
-   ipv6 ospf 1 area 0.0.0.0
-   ip virtual-router address 10.0.20.3
-   ipv6 virtual-router address 2020::3
-!
-interface Vlan30
-   ipv6 enable
-   ipv6 address 2030::1/64
-   ipv6 ospf 1 area 0.0.0.0
-   ipv6 virtual-router address 2030::3
-!
-ip virtual-router mac-address 00:11:ff:00:11:ff
+   ip address 172.20.20.13/24
+   ipv6 address 2001:172:20:20::13/80
 !
 ip routing
 !
@@ -85,6 +73,18 @@ ip route 0.0.0.0/0 172.20.20.1
 !
 ipv6 route ::/0 2001:172:20:20::1
 !
+router bgp 1
+   neighbor 10.0.80.5 remote-as 2
+   neighbor 2080::5 remote-as 2
+   !
+   address-family ipv4
+      neighbor 10.0.80.5 activate
+      redistribute ospf
+   !
+   address-family ipv6
+      neighbor 2080::5 activate
+      redistribute ospfv3
+!
 router multicast
    ipv4
       software-forwarding kernel
@@ -93,9 +93,11 @@ router multicast
       software-forwarding kernel
 !
 router ospf 1
+   redistribute bgp
    network 10.0.0.0/16 area 0.0.0.0
    max-lsa 12000
 !
 ipv6 router ospf 1
+   redistribute bgp
 !
 end
