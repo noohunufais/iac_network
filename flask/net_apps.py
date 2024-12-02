@@ -105,7 +105,8 @@ def compare_config(connection, device_name):
             result = subprocess.run(["diff", running_config_file, latest_config_file],
                                     stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             if result.returncode == 0:
-                return "No differences found between the running configuration and the local file."
+                return False
+                # return "No differences found between the running configuration and the local file."
             else:
                 return f"Differences found:\n{result.stdout}"
         except Exception as e:

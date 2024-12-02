@@ -1,9 +1,9 @@
 ! Command: show running-config
-! device: S3 (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
+! device: R7 (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
 !
 no aaa root
 !
-username admin privilege 15 role network-admin secret sha512 $6$jxRaR0fQ5Y/zFBhO$Nd8tn7582iWA8MSq.rYV6Fm5ksLrKBv/SUGEJNccD3Z1tzEm/AaAcXwQI8Rdp8bQuGlDg/KebfL1xLyMk0EWu1
+username admin privilege 15 role network-admin secret sha512 $6$8TIleypMf5W8pqxX$6qEtLid9Fr6Q.EAFCNdcc/ceLAUCfT3LgFD4mnAgtFotMFBdeaKEm4p246hJJ467iD6CgxrO1FKpK.eoPxiz/.
 !
 management api http-commands
    no shutdown
@@ -14,14 +14,7 @@ transceiver qsfp default-mode 4x10G
 !
 service routing protocols model multi-agent
 !
-logging trap notifications
-logging host 10.0.60.100
-logging source-address 10.0.60.13
-!
-hostname S3
-!
-snmp-server community netman rw
-snmp-server host 10.0.60.100 version 2c netman
+hostname R7
 !
 spanning-tree mode mstp
 !
@@ -36,23 +29,19 @@ management api netconf
    transport ssh default
 !
 interface Ethernet1
+   mac-address 00:00:00:00:00:07
+   no switchport
+   ip address 10.0.50.7/24
 !
 interface Ethernet2
 !
 interface Ethernet3
 !
-interface Ethernet4
-!
 interface Management0
-   ip address 172.20.20.18/24
-   ipv6 address 2001:172:20:20::18/80
-!
-interface Vlan1
-   ip address 10.0.60.13/24
+   ip address 172.20.20.27/24
+   ipv6 address 2001:172:20:20::27/80
 !
 ip routing
-!
-ipv6 unicast-routing
 !
 ip route 0.0.0.0/0 172.20.20.1
 !
@@ -64,5 +53,9 @@ router multicast
    !
    ipv6
       software-forwarding kernel
+!
+router rip
+   network 10.0.50.0/24
+   no shutdown
 !
 end
