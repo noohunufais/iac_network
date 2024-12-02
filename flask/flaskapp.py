@@ -38,7 +38,6 @@ def receive_alert():
         else:
             instance_ip = 'No IP found'
         
-        # Log the extracted IP or take additional actions
         return jsonify({"status": "success", "instance_ip": instance_ip}), 200
 
     except Exception as e:

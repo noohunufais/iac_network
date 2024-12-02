@@ -1,0 +1,141 @@
+Troubleshooting Log
+===================
+
+Starting troubleshooting process for IP: 10.0.50.7
+Searching for device with IP 10.0.50.7 in IPAM data.
+Found device: R7 for IP 10.0.50.7.
+No configuration mismatch detected on R7.
+Starting traceroute to 10.0.50.7.
+Traceroute output:
+traceroute to 10.0.50.7 (10.0.50.7), 30 hops max, 60 byte packets
+ 1  10.0.60.3 (10.0.60.3)  0.814 ms  1.056 ms  1.280 ms
+ 2  10.0.60.4 (10.0.60.4)  3.126 ms  3.349 ms  3.547 ms
+ 3  10.0.40.6 (10.0.40.6)  4.161 ms  4.935 ms  5.506 ms
+ 4  * * *
+ 5  * * *
+ 6  * * *
+ 7  * * *
+ 8  * * *
+ 9  * * *
+10  * * *
+11  * * *
+12  * * *
+13  * * *
+14  * * *
+15  * * *
+16  * * *
+17  * * *
+18  * * *
+19  * * *
+20  * * *
+21  * * *
+22  * * *
+23  * * *
+24  * * *
+25  * * *
+26  * * *
+27  * * *
+28  * * *
+29  * * *
+30  * * *
+
+Traceroute hops: ['10.0.60.3', '10.0.60.4', '10.0.40.6']
+Last reachable hop: 10.0.40.6. Moving to next device for troubleshooting...
+Searching for device with IP 10.0.40.6 in IPAM data.
+Found device: R6 for IP 10.0.40.6.
+Configuration mismatch found on R6. Reverting...
+Attempting to revert R6 to its golden state.
+Using golden config: ../golden_configs/R6_2024-12-02T00:38:49Z.txt
+Successfully reverted R6 to golden state.
+configure terminal
+R6(config)#! Command: show running-config
+R6(config)#! device: R6 (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
+R6(config)#!
+R6(config)#no aaa root
+R6(config)#!
+R6(config)#username admin privilege 15 role network-admin secret sha512 $6$oY7ZkBhpCxHIm.D8$oLNYrhhbC7GP0tochWyDwn0D/VjzivUyCmwRfPsYgFEgixCnirr7jVHKOjhS3JsNGOU0/e3cwRPQzJLenxN9d0
+R6(config)#!
+R6(config)#management api http-commands
+R6(config-mgmt-api-http-cmds)#no shutdown
+R6(config-mgmt-api-http-cmds)#!
+R6(config-mgmt-api-http-cmds)#ip dhcp relay information option
+R6(config)#ip dhcp relay always-on
+R6(config)#ip dhcp relay all-subnets default
+R6(config)#!
+R6(config)#no service interface inactive port-id allocation disabled
+R6(config)#!
+R6(config)#transceiver qsfp default-mode 4x10G
+R6(config)#!
+R6(config)#service routing protocols model multi-agent
+R6(config)#!
+R6(config)#hostname R6
+R6(config)#!
+R6(config)#spanning-tree mode mstp
+R6(config)#!
+R6(config)#system l1
+R6(config-system-l1)#unsupported speed action error
+R6(config-system-l1)#unsupported error-correction action error
+R6(config-system-l1)#!
+R6(config-system-l1)#management api gnmi
+R6(config-mgmt-api-gnmi)#transport grpc default
+R6(config-gnmi-transport-default)#!
+R6(config-gnmi-transport-default)#management api netconf
+R6(config-mgmt-api-netconf)#transport ssh default
+R6(config-netconf-transport-default)#!
+R6(config-netconf-transport-default)#interface Ethernet1
+R6(config-if-Et1)# no shutdown
+R6(config-if-Et1)#mac-address 00:00:00:00:00:06
+R6(config-if-Et1)#no switchport
+R6(config-if-Et1)#ip address 10.0.40.6/24
+R6(config-if-Et1)#!
+R6(config-if-Et1)#interface Ethernet2
+R6(config-if-Et2)# no shutdown
+R6(config-if-Et2)#no switchport
+R6(config-if-Et2)#ip address 10.0.50.6/24
+R6(config-if-Et2)#ip helper-address 10.0.60.2
+R6(config-if-Et2)#!
+R6(config-if-Et2)#interface Ethernet3
+! Interface does not exist. The configuration will not take effect until the module is inserted.
+R6(config-if-Et3)# no shutdown
+R6(config-if-Et3)#!
+R6(config-if-Et3)#interface Management0
+R6(config-if-Ma0)# no shutdown
+R6(config-if-Ma0)#ip address 172.20.20.26/24
+R6(config-if-Ma0)#ipv6 address 2001:172:20:20::26/80
+R6(config-if-Ma0)#!
+R6(config-if-Ma0)#ip routing
+R6(config)#!
+R6(config)#ip route 0.0.0.0/0 172.20.20.1
+R6(config)#!
+R6(config)#ipv6 route ::/0 2001:172:20:20::1
+R6(config)#!
+R6(config)#router multicast
+R6(config-router-multicast)#ipv4
+R6(config-router-multicast-ipv4)#software-forwarding kernel
+R6(config-router-multicast-ipv4)#!
+R6(config-router-multicast-ipv4)#ipv6
+R6(config-router-multicast-ipv6)#software-forwarding kernel
+R6(config-router-multicast-ipv6)#!
+R6(config-router-multicast-ipv6)#router ospf 1
+R6(config-router-ospf)#redistribute rip
+R6(config-router-ospf)#network 10.0.40.0/24 area 0.0.0.10
+R6(config-router-ospf)#network 10.0.50.0/24 area 0.0.0.10
+R6(config-router-ospf)#max-lsa 12000
+R6(config-router-ospf)#!
+R6(config-router-ospf)#router rip
+R6(config-router-rip)#network 10.0.50.0/24
+R6(config-router-rip)#redistribute ospf
+R6(config-router-rip)#no shutdown
+R6(config-router-rip)#!
+R6(config-router-rip)#end
+R6#
+Starting traceroute to 10.0.50.7.
+Traceroute output:
+traceroute to 10.0.50.7 (10.0.50.7), 30 hops max, 60 byte packets
+ 1  10.0.60.3 (10.0.60.3)  1.088 ms  1.494 ms  1.754 ms
+ 2  10.0.60.4 (10.0.60.4)  3.709 ms  4.020 ms  4.327 ms
+ 3  10.0.40.6 (10.0.40.6)  5.675 ms  5.982 ms  6.318 ms
+ 4  10.0.50.7 (10.0.50.7)  5.533 ms  5.673 ms  5.782 ms
+
+Traceroute hops: ['10.0.60.3', '10.0.60.4', '10.0.40.6', '10.0.50.7']
+Traceroute successful to 10.0.50.7.
