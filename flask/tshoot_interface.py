@@ -1,15 +1,68 @@
-from net_apps import net_apps, load_ipam_file
 import os
 import glob
-from netmiko import ConnectHandler
 import subprocess
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from netmiko import ConnectHandler
+from net_apps import net_apps, load_ipam_file
 import ipaddress
+from email.mime.base import MIMEBase
+from email import encoders
 
 
-# Create or overwrite the log file at the beginning of the script
-with open("troubleshooting_log.txt", "w") as log_file:
-    log_file.write("Troubleshooting Log\n")
-    log_file.write("===================\n\n")
+def create_tshoot_file():
+    # Create or overwrite the log file at the beginning of the script
+    with open("troubleshooting_log.txt", "w") as log_file:
+        log_file.write("Troubleshooting Log\n")
+        log_file.write("===================\n\n")
+
+# Email notification with log attachment
+def send_email(device_name, ip):
+    try:
+        sender_email = "noohnufais13@gmail.com"
+        receiver_email = "noohnufais13@gmail.com"
+        smtp_server = "smtp.gmail.com"
+        smtp_port = 587
+        email_password = "ocjn mmft hmji gtfo"
+
+        subject = f"Attention: Network Issue Detected on Device {device_name} (IP: {ip})"
+
+        body = (
+            f"Attention Required: Device {device_name} (IP: {ip}) has been involved in a network issue.\n"
+            f"This indicates a possible loop or repeated issues with the device that needs further investigation.\n"
+            f"Attached is the troubleshooting log for your review."
+        )
+
+        msg = MIMEMultipart()
+        msg['From'] = sender_email
+        msg['To'] = receiver_email
+        msg['Subject'] = subject
+
+        msg.attach(MIMEText(body, 'plain'))
+
+        # Attach the log file
+        log_file = "troubleshooting_log.txt"
+        with open(log_file, "rb") as attachment:
+            part = MIMEBase("application", "octet-stream")
+            part.set_payload(attachment.read())
+        
+        encoders.encode_base64(part)
+        part.add_header(
+            "Content-Disposition",
+            f"attachment; filename={log_file}",
+        )
+        msg.attach(part)
+
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(sender_email, email_password)
+            server.sendmail(sender_email, receiver_email, msg.as_string())
+        
+        write_log(f"Email with log file sent to {receiver_email} regarding device {device_name}.")
+    except Exception as e:
+        write_log(f"Failed to send email notification: {e}")
+
 
 # Helper function: Write logs to a file
 def write_log(message):
@@ -102,6 +155,7 @@ def revert_to_golden_state(device_name, device_info):
 
 # Main troubleshooting function
 def tshoot(ip):
+    create_tshoot_file()
     write_log(f"Starting troubleshooting process for IP: {ip}")
     ipam_data = load_ipam_file()
     hops = []
@@ -117,8 +171,10 @@ def tshoot(ip):
             return
         
         if device_name in troubleshooted_devices:
-            send_email()
-            
+            write_log(f"Device {device_name} revisited. Sending email notification.")
+            send_email(device_name, ip)
+            return  # Exit to avoid endless loops
+        
         troubleshooted_devices.add(device_name)
 
         # Device info for Netmiko
@@ -153,3 +209,5 @@ def tshoot(ip):
         last_hop = hops[-1]
         write_log(f"Last reachable hop: {last_hop}. Moving to next device for troubleshooting...")
         ip = last_hop
+
+tshoot('10.0.50.7')
