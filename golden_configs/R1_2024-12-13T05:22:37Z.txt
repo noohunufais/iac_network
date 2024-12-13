@@ -1,0 +1,101 @@
+! Command: show running-config
+! device: R1 (cEOSLab, EOS-4.32.2F-38195967.4322F (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret sha512 $6$T9X.EDdyOnhTwPKN$DwyAJmWqevOVET9ly9etMLtw5RNXsrz4wbuonYmcVZcPEkYkdCYz6EmLRsAKyPeQn/P1/sZF8tZCyx3MTOKY0.
+!
+management api http-commands
+   no shutdown
+!
+no service interface inactive port-id allocation disabled
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+logging trap notifications
+logging host 10.0.60.100
+logging source-address 10.0.60.1
+!
+hostname R1
+!
+snmp-server community netman rw
+snmp-server host 10.0.60.100 version 2c netman
+!
+spanning-tree mode mstp
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+vlan 10,20,30
+!
+management api gnmi
+   transport grpc default
+!
+management api netconf
+   transport ssh default
+!
+interface Ethernet1
+!
+interface Ethernet2
+   switchport mode trunk
+!
+interface Ethernet3
+   no switchport
+   ip address 10.0.60.1/24
+   ipv6 enable
+   ipv6 address 2060::1/64
+   ipv6 ospf 1 area 0.0.0.0
+!
+interface Management0
+   ip address 172.20.20.11/24
+   ipv6 address 2001:172:20:20::11/80
+!
+interface Vlan10
+   ip address 10.0.10.1/24
+   ipv6 enable
+   ipv6 address 2010::1/64
+   ipv6 ospf 1 area 0.0.0.0
+   ip virtual-router address 10.0.10.3
+   ipv6 virtual-router address 2010::3
+!
+interface Vlan20
+   ip address 10.0.20.1/24
+   ipv6 enable
+   ipv6 address 2020::1/64
+   ipv6 ospf 1 area 0.0.0.0
+   ip virtual-router address 10.0.20.3
+   ipv6 virtual-router address 2020::3
+!
+interface Vlan30
+   ipv6 enable
+   ipv6 address 2030::1/64
+   ipv6 ospf 1 area 0.0.0.0
+   ipv6 virtual-router address 2030::3
+!
+ip virtual-router mac-address 00:11:ff:00:11:ff
+!
+ip routing
+!
+ipv6 unicast-routing
+!
+ip route 0.0.0.0/0 172.20.20.1
+!
+ipv6 route ::/0 2001:172:20:20::1
+!
+router multicast
+   ipv4
+      software-forwarding kernel
+   !
+   ipv6
+      software-forwarding kernel
+!
+router ospf 1
+   network 10.0.0.0/16 area 0.0.0.0
+   max-lsa 12000
+!
+ipv6 router ospf 1
+!
+end
